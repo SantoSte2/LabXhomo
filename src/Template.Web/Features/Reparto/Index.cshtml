@@ -1,0 +1,522 @@
+﻿@model Template.Web.Features.Reparto.CalendarioColleghiViewModel
+@using System.Linq
+
+@{
+    Layout = null;
+    var titoloRuolo = Model.RuoloUtente == "Super" ? "Dashboard Super" : "Dipendente";
+}
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MarcTempo - Calendario Colleghi</title>
+
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet"
+          href="~/css/marc-tempo.css"
+          asp-append-version="true" />
+    
+</head>
+
+<body class="marc-app-body">
+    <div class="marc-app-page">
+
+        <header class="marc-app-header marc-app-header-compact">
+            <div class="marc-brand marc-brand-header">
+                <div class="marc-brand-anchor">⚓</div>
+            </div>
+
+            <div class="marc-page-title">
+                <h1>MarcTempo</h1>
+                
+            </div>
+
+            <div class="marc-user-box marc-user-box-compact">
+                <div class="marc-user-meta">
+                    <div class="marc-employee-code-label">Codice</div>
+                    <div class="marc-employee-code">@Model.MatricolaUtente</div>
+
+                    <form method="post" action="@Url.Action("Logout", "Login")">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn marc-btn-danger">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+
+                <div class="marc-avatar marc-avatar-tooltip" data-tooltip="@Model.NominativoUtente">
+                    @Model.InizialiUtente
+                </div>
+            </div>
+        </header>
+
+        <main class="marc-app-main">
+            <section class="marc-colleagues-page">
+
+                <div class="marc-colleagues-heading">
+                    <div>
+                        <h2>Ferie reparto</h2>
+                        <p>
+                            Vista mensile delle ferie dei colleghi e del Super di reparto.
+                        </p>
+                    </div>
+
+                    <div class="marc-colleagues-actions reparto-toolbar">
+                        @if (Model.RuoloUtente == "Super")
+                        {
+                            <a class="btn marc-btn-secondary"
+                               href="@Url.Action("Index", "Super")">
+                                Torna alla Dashboard
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn marc-btn-secondary"
+                               href="@Url.Action("Index", "Dipendente")">
+                                Torna alla Home
+                            </a>
+                        }
+
+                        <div class="reparto-view-toggle">
+                            <a class="btn @(Model.VistaMensile ? "marc-btn-primary" : "marc-btn-secondary")"
+                               href="@Url.Action("Index", "Reparto", new
+                               {
+                                   vista = "Mensile",
+                                   mese = Model.Mese,
+                                   anno = Model.Anno
+                               })">
+                                Vista mensile
+                            </a>
+
+                            <a class="btn @(Model.VistaAnnuale ? "marc-btn-primary" : "marc-btn-secondary")"
+                               href="@Url.Action("Index", "Reparto", new
+                               {
+                                   vista = "Annuale",
+                                   anno = Model.Anno
+                               })">
+                                Vista annuale
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.VistaMensile)
+                {
+                    @* =====================================================
+                       VISTA MENSILE
+                       Persone sulle righe e giorni del mese sulle colonne.
+                       ===================================================== *@
+
+                    <div class="marc-calendar-nav marc-colleagues-nav reparto-month-navigation">
+                        <a class="marc-calendar-arrow"
+                           href="@(Url.Action("Index", "Reparto", new
+                           {
+                               vista = "Mensile",
+                               mese = Model.MesePrecedente,
+                               anno = Model.AnnoMesePrecedente
+                           }) + "#calendario-colleghi")">
+                        ‹
+                    </a>
+
+                        <div class="marc-calendar-current">
+                            @Model.NomeMese @Model.Anno
+                        </div>
+
+                        <a class="marc-calendar-arrow"
+                           href="@(Url.Action("Index", "Reparto", new
+                       {
+                           vista = "Mensile",
+                           mese = Model.MeseSuccessivo,
+                           anno = Model.AnnoMeseSuccessivo
+                       }) + "#calendario-colleghi")">
+                        ›
+                    </a>
+                </div>
+
+                    <div id="calendario-colleghi"
+                         class="marc-colleagues-table-wrapper">
+
+                        <table class="marc-colleagues-table">
+                            <thead>
+                                <tr>
+                                    <th class="marc-colleague-name-column">
+                                        Dipendente
+                                    </th>
+
+                                @foreach (var giorno in Model.Giorni)
+                                    {
+                                        /*
+                                        * Per sabato e domenica mostriamo il nome completo.
+                                        * Negli altri giorni manteniamo l'abbreviazione italiana
+                                        * già calcolata dal controller.
+                                        */
+                                        var nomeGiorno = giorno.Data.DayOfWeek switch
+                                        {
+                                            DayOfWeek.Saturday => "Sabato",
+                                            DayOfWeek.Sunday => "Domenica",
+                                            _ => giorno.NomeGiornoBreve
+                                        };
+
+                                        /*
+                                        * Il tooltip mostra il nome completo della festività.
+                                        * Per i giorni normali non viene mostrato alcun testo aggiuntivo.
+                                        */
+                                        var tooltipGiorno = giorno.FestivoNazionale
+                                        ? giorno.NomeFestivita
+                                        : string.Empty;
+
+                                        <th class="reparto-day-header
+                                           @(giorno.Oggi ? "reparto-is-today" : "")
+                                           @(giorno.Weekend ? "reparto-is-weekend" : "")
+                                           @(giorno.FestivoNazionale
+                                                               ? $"reparto-is-holiday {giorno.ClasseFestivita}"
+                                                               : "")"
+                                            title="@tooltipGiorno">
+
+                                            @* Numero del giorno del mese. *@
+                                            <span class="reparto-day-number">
+                                                @giorno.NumeroGiorno
+                                            </span>
+
+                                            @* Nome del giorno: Sabato, Domenica oppure abbreviazione. *@
+                                            <small class="reparto-weekday-name
+                                                    @(giorno.Weekend ? "reparto-weekend-name" : "")">
+                                                @nomeGiorno
+                                            </small>
+
+                                            @*
+                                             * Nei giorni festivi mostriamo anche il nome della festività.
+                                             * Il testo può andare su due righe senza allargare eccessivamente
+                                             * l'intera tabella.
+                                            *@
+                                            @if (giorno.FestivoNazionale)
+                                            {
+                                                <small class="reparto-holiday-name">
+                                                    @giorno.NomeFestivita
+                                                </small>
+                                            }
+                                        </th>
+                                    }
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var persona in Model.Persone)
+                                {
+                                    <tr>
+                                        <td class="marc-colleague-name-column">
+                                            <strong>@persona.Nominativo</strong>
+
+                                            <span>
+                                                @persona.Matricola - @persona.Ruolo
+                                            </span>
+                                        </td>
+
+                                        @foreach (var cella in persona.Celle)
+                                        {
+                                            /*
+                                            * Il tooltip della cella mostra il nome della festività.
+                                            * I pallini delle ferie mantengono invece il proprio tooltip
+                                            * con il dettaglio degli eventi.
+                                            */
+                                            var tooltipCella = cella.FestivoNazionale
+                                            ? cella.NomeFestivita
+                                            : string.Empty;
+
+                                            <td class="marc-colleague-day-cell reparto-day-cell
+                                                       @(cella.Oggi ? "reparto-is-today" : "")
+                                                       @(cella.Weekend ? "reparto-is-weekend" : "")
+                                                       @(cella.FestivoNazionale
+                                                                   ? $"reparto-is-holiday {cella.ClasseFestivita}"
+                                                                   : "")"
+                                                 title="@tooltipCella">
+
+                                                 @if (cella.HaEventi)
+                                                {
+                                                    /*
+                                                    * Ogni richiesta è rappresentata da un quadratino.
+                                                    * Il colore continua a dipendere dallo stato:
+                                                    * arancione, verde oppure rosso.
+                                                    */
+                                                    <div class="marc-colleague-dots"
+                                                         title="@string.Join(", ", cella.Eventi.Select(e => e.Testo))">
+
+                                                        @foreach (var evento in cella.Eventi)
+                                                        {
+                                                            <span class="marc-calendar-dot @evento.StatoCssClass"></span>
+                                                        }
+                                                    </div>
+                                                }
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="marc-colleagues-legend">
+                        <span>
+                            <i class="marc-calendar-dot marc-status-pending"></i>
+                            In attesa
+                        </span>
+
+                        <span>
+                            <i class="marc-calendar-dot marc-status-approved"></i>
+                            Approvata
+                        </span>
+
+                        <span>
+                            <i class="marc-calendar-dot marc-status-rejected"></i>
+                            Respinta
+                        </span>
+                        <span>
+                            <i class="reparto-holiday-legend reparto-holiday-civil"></i>
+                            Festività civile
+                        </span>
+
+                        <span>
+                            <i class="reparto-holiday-legend reparto-holiday-religious"></i>
+                            Festività religiosa
+                        </span>
+                    </div>
+                }
+                else
+                {
+                    @* =====================================================
+                       VISTA ANNUALE
+                       Mesi sulle righe e giorni da 1 a 31 sulle colonne.
+                       ===================================================== *@
+
+                    <div class="marc-calendar-nav reparto-year-navigation">
+                        <a class="marc-calendar-arrow"
+                           href="@Url.Action("Index", "Reparto", new
+                           {
+                               vista = "Annuale",
+                               anno = Model.Anno - 1
+                           })">
+                        ‹
+                    </a>
+
+                        <div class="marc-calendar-current">
+                            Anno @Model.Anno
+                        </div>
+
+                        <a class="marc-calendar-arrow"
+                           href="@Url.Action("Index", "Reparto", new
+                       {
+                           vista = "Annuale",
+                           anno = Model.Anno + 1
+                       })">
+                        ›
+                    </a>
+                </div>
+
+                    <div class="reparto-year-table-wrapper">
+                        <table class="reparto-year-table">
+                            <thead>
+                                <tr>
+                                    <th class="reparto-year-month-column">
+                                        Mese
+                                    </th>
+
+                                @foreach (var giorno in Model.GiorniAnno)
+                                    {
+                                        <th>@giorno</th>
+                                    }
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var mese in Model.MesiAnno)
+                                {
+                                    <tr class="@(mese.MeseCorrente
+                                                                ? "reparto-current-month"
+                                                                : "")">
+
+                                <td class="reparto-year-month-column">
+                                    <a href="@Url.Action("Index", "Reparto", new
+                                       {
+                                           vista = "Mensile",
+                                           mese = mese.NumeroMese,
+                                           anno = Model.Anno
+                                       })">
+                                        @mese.NomeMese
+                                    </a>
+                                </td>
+
+                                @foreach (var cella in mese.Celle)
+                                        {
+                                            /*
+                                            * Tutti i mesi vengono rappresentati con 31 colonne.
+                                            *
+                                            * Quando il giorno non esiste, per esempio:
+                                            * - 30 febbraio;
+                                            * - 31 aprile;
+                                            * - 31 giugno;
+                                            * mostriamo una cella disabilitata e passiamo subito
+                                            * alla cella successiva.
+                                            */
+                                            if (!cella.Esiste || !cella.Data.HasValue)
+                                            {
+                                                <td class="reparto-invalid-day"
+                                                    aria-label="Giorno non presente nel mese">
+                                                </td>
+
+                                                continue;
+                                            }
+
+                                            var dataCella = cella.Data.Value;
+
+                                            /*
+                                            * Nella vista annuale non possiamo scrivere per esteso
+                                            * "Sabato" e "Domenica", perché ogni colonna è molto stretta.
+                                            * Usiamo quindi due abbreviazioni immediatamente leggibili.
+                                            */
+                                            var etichettaWeekend = dataCella.DayOfWeek switch
+                                            {
+                                                DayOfWeek.Saturday => "SAB",
+                                                DayOfWeek.Sunday => "DOM",
+                                                _ => string.Empty
+                                            };
+
+                                            /*
+                                            * Anche la categoria della festività viene abbreviata:
+                                            * CIV = festività civile;
+                                            * REL = festività religiosa.
+                                            *
+                                            * Il nome completo resta disponibile passando il mouse
+                                            * sopra la cella.
+                                            */
+                                            var etichettaFestivita =
+                                            cella.ClasseFestivita == "reparto-holiday-civil"
+                                            ? "CIV"
+                                            : "REL";
+
+                                            /*
+                                            * Il tooltip mostra prima il nome della festività.
+                                            * Nei weekend normali mostra invece Sabato o Domenica.
+                                            */
+                                            var tooltipCella = cella.FestivoNazionale
+                                            ? cella.NomeFestivita
+                                            : etichettaWeekend switch
+                                            {
+                                                "SAB" => "Sabato",
+                                                "DOM" => "Domenica",
+                                                _ => string.Empty
+                                            };
+
+                                            <td class="reparto-year-day-cell
+                                               @(cella.Weekend ? "reparto-year-weekend" : "")
+                                               @(cella.Oggi ? "reparto-year-today" : "")
+                                               @(cella.FestivoNazionale
+                                                                   ? $"reparto-is-holiday {cella.ClasseFestivita}"
+                                                                   : "")"
+                                                title="@tooltipCella">
+
+                                                @*
+                                                 * Prima delle eventuali iniziali dei dipendenti
+                                                 * mostriamo le piccole etichette informative.
+                                                 *@
+                                                <div class="reparto-year-cell-labels">
+
+                                                @if (!string.IsNullOrWhiteSpace(etichettaWeekend))
+                                                            {
+                                                                <span class="reparto-year-weekend-label">
+                                                                    @etichettaWeekend
+                                                                </span>
+                                                            }
+
+                                                            @if (cella.FestivoNazionale)
+                                                            {
+                                                                <span class="reparto-year-holiday-label
+                                                     @cella.ClasseFestivita"
+                                                                      title="@cella.NomeFestivita">
+                                                                    @etichettaFestivita
+                                                                </span>
+                                                            }
+
+                                                </div>
+
+                                                @*
+                                                 * Le persone in ferie continuano a essere mostrate
+                                                 * tramite le loro iniziali.
+                                                 *
+                                                 * Lo stato mantiene i colori già esistenti:
+                                                 * - arancione: in attesa;
+                                                 * - verde: approvata;
+                                                 * - rosso: respinta.
+                                                 *@
+                                                @if (cella.HaPersone)
+                                                {
+                                                    <div class="reparto-year-initials">
+
+                                                        @foreach (var persona in cella.Persone)
+                                                        {
+                                                            <span class="reparto-year-initial
+                                                                @persona.StatoCssClass"
+                                                                  title="@($"{persona.Nominativo} - {persona.Matricola} - {persona.Stato}")">
+                                                                @persona.Iniziali
+                                                            </span>
+                                                        }
+
+                                                    </div>
+                                                }
+
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    @*
+                     * Legenda specifica della vista annuale.
+                     * Le festività riutilizzano gli stessi colori
+                     * già introdotti nella vista mensile.
+                     *@
+                    <div class="marc-colleagues-legend reparto-year-legend">
+
+                        <span>
+                            <i class="reparto-weekend-legend"></i>
+                            Sabato o domenica
+                        </span>
+
+                        <span>
+                            <i class="reparto-holiday-legend reparto-holiday-civil"></i>
+                            Festività civile
+                        </span>
+
+                        <span>
+                            <i class="reparto-holiday-legend reparto-holiday-religious"></i>
+                            Festività religiosa
+                        </span>
+
+                    </div>
+
+                    <div class="marc-colleagues-legend">
+                        <span>
+                            <i class="marc-calendar-dot marc-status-pending"></i>
+                            In attesa
+                        </span>
+
+                        <span>
+                            <i class="marc-calendar-dot marc-status-approved"></i>
+                            Approvata
+                        </span>
+
+                        <span>
+                            <i class="marc-calendar-dot marc-status-rejected"></i>
+                            Respinta
+                        </span>
+                    </div>
+                }
+
+            </section>
+        </main>
+
+    </div>
+</body>
+</html>

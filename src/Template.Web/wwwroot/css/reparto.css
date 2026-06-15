@@ -1,0 +1,325 @@
+﻿/* =========================================================
+   CALENDARIO COLLEGHI
+   Stili isolati dalla grafica generale di MarcTempo.
+   ========================================================= */
+
+/* Distanza tra intestazione/pulsanti e selettore del mese */
+.reparto-page-actions {
+    margin-top: 1rem;
+    padding-bottom: 1.75rem;
+}
+
+    .reparto-page-actions .btn {
+        min-width: 180px;
+    }
+
+.reparto-month-navigation {
+    margin-top: .5rem !important;
+    margin-bottom: 2rem !important;
+}
+
+/* Contenitore della tabella */
+#calendario-colleghi {
+    border: 2px solid #645cff;
+    border-radius: 12px;
+    overflow-x: auto;
+    background: #ffffff;
+}
+
+    /* Griglia vera e visibile */
+    #calendario-colleghi .marc-colleagues-table {
+        width: max-content;
+        min-width: 100%;
+        border-collapse: collapse !important;
+        border-spacing: 0 !important;
+    }
+
+        #calendario-colleghi .marc-colleagues-table th,
+        #calendario-colleghi .marc-colleagues-table td {
+            border: 1px solid #aaa6e8 !important;
+            padding: .4rem;
+        }
+
+    /* Intestazione giorni */
+    #calendario-colleghi .reparto-day-header {
+        min-width: 47px;
+        height: 58px;
+        text-align: center;
+        vertical-align: middle;
+        background-color: #f4f4f4;
+    }
+
+        #calendario-colleghi .reparto-day-header span {
+            display: block;
+            font-weight: 800;
+        }
+
+        #calendario-colleghi .reparto-day-header small {
+            display: block;
+            margin-top: .15rem;
+            color: #666666;
+        }
+
+    /* Celle dei dipendenti */
+    #calendario-colleghi .reparto-day-cell {
+        min-width: 47px;
+        height: 52px;
+        text-align: center;
+        vertical-align: middle;
+        background-color: #ffffff;
+    }
+
+    /* Separazione più marcata tra nomi e calendario */
+    #calendario-colleghi .marc-colleague-name-column {
+        border-right: 3px solid #645cff !important;
+        background-color: #ffffff;
+    }
+
+    /* Sabato e domenica: giorni non lavorativi */
+    #calendario-colleghi .reparto-is-weekend {
+        background-color: #ededed !important;
+        background-image: repeating-linear-gradient( 135deg, rgba(0, 0, 0, .10) 0, rgba(0, 0, 0, .10) 2px, transparent 2px, transparent 8px ) !important;
+        color: #777777;
+    }
+
+    /* Data corrente */
+    #calendario-colleghi .reparto-is-today {
+        position: relative;
+        background-color: #ebe9ff !important;
+        box-shadow: inset 0 0 0 3px #2f22e8 !important;
+        z-index: 2;
+    }
+
+        /* Data corrente quando cade nel weekend */
+        #calendario-colleghi .reparto-is-today.reparto-is-weekend {
+            background-color: #ebe9ff !important;
+            background-image: repeating-linear-gradient( 135deg, rgba(47, 34, 232, .18) 0, rgba(47, 34, 232, .18) 2px, transparent 2px, transparent 8px ) !important;
+        }
+
+    /* Evidenzia la riga osservata senza coprire weekend e oggi */
+    #calendario-colleghi tbody tr:hover td:not(.reparto-is-weekend):not(.reparto-is-today) {
+        background-color: #f4f3ff !important;
+    }
+
+    #calendario-colleghi tbody tr:hover .marc-colleague-name-column {
+        background-color: #f4f3ff !important;
+    }
+
+    /* I quadratini devono rimanere visibili sopra gli sfondi */
+    #calendario-colleghi .marc-colleague-dots {
+        position: relative;
+        z-index: 3;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .reparto-page-actions {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: .75rem;
+        padding-bottom: 1.5rem;
+    }
+
+        .reparto-page-actions .btn {
+            width: 100%;
+        }
+
+    #calendario-colleghi .reparto-day-header,
+    #calendario-colleghi .reparto-day-cell {
+        min-width: 41px;
+    }
+}
+/* =========================================================
+   SELETTORE VISTA MENSILE / ANNUALE
+   ========================================================= */
+
+.reparto-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.75rem;
+}
+
+.reparto-view-toggle {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    flex-wrap: wrap;
+}
+
+    .reparto-view-toggle .btn {
+        min-width: 160px;
+    }
+
+/* =========================================================
+   VISTA ANNUALE
+   ========================================================= */
+
+.reparto-year-navigation {
+    max-width: 880px;
+    margin: 1rem auto 2rem;
+    border: 1px solid var(--marc-border);
+    border-radius: 12px;
+}
+
+.reparto-year-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 2px solid #645cff;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .07);
+}
+
+.reparto-year-table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+    .reparto-year-table th,
+    .reparto-year-table td {
+        min-width: 52px;
+        height: 50px;
+        padding: .25rem;
+        border-right: 1px solid #aaa6e8;
+        border-bottom: 1px solid #aaa6e8;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .reparto-year-table thead th {
+        height: 46px;
+        background: #f4f4f4;
+        font-weight: 800;
+        border-bottom: 2px solid #645cff;
+    }
+
+.reparto-year-month-column {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    min-width: 150px !important;
+    background: #ffffff;
+    border-right: 3px solid #645cff !important;
+    text-align: left !important;
+    padding-left: .75rem !important;
+}
+
+thead .reparto-year-month-column {
+    z-index: 6;
+    background: #f4f4f4;
+}
+
+.reparto-year-month-column a {
+    color: var(--marc-text);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+    .reparto-year-month-column a:hover {
+        color: var(--marc-primary);
+        text-decoration: underline;
+    }
+
+.reparto-year-cell {
+    background: #ffffff;
+}
+
+/* Sabati e domeniche variano in base al mese */
+.reparto-year-weekend {
+    background-color: #eeeeee !important;
+    background-image: repeating-linear-gradient( 135deg, rgba(0, 0, 0, .09) 0, rgba(0, 0, 0, .09) 2px, transparent 2px, transparent 8px ) !important;
+}
+
+/* Giorni che non esistono: 29/30/31 di alcuni mesi */
+.reparto-invalid-day {
+    background-color: #d9d9d9 !important;
+    background-image: repeating-linear-gradient( 45deg, rgba(0, 0, 0, .14) 0, rgba(0, 0, 0, .14) 2px, transparent 2px, transparent 6px ) !important;
+}
+
+/* Giorno corrente */
+.reparto-year-today {
+    box-shadow: inset 0 0 0 3px var(--marc-primary);
+    position: relative;
+    z-index: 2;
+}
+
+/* Riga del mese corrente */
+.reparto-current-month .reparto-year-month-column {
+    background: #ebe9ff;
+    color: var(--marc-primary);
+}
+
+.reparto-year-initials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .2rem;
+}
+
+.reparto-year-initial {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 25px;
+    height: 23px;
+    padding: 0 .25rem;
+    border-radius: 5px;
+    font-size: .68rem;
+    font-weight: 800;
+    cursor: help;
+}
+
+    .reparto-year-initial.marc-status-pending {
+        background: #fff1d6;
+        color: #9a5a00;
+    }
+
+    .reparto-year-initial.marc-status-approved {
+        background: #dff3e6;
+        color: #176b36;
+    }
+
+    .reparto-year-initial.marc-status-rejected {
+        background: #f8d7da;
+        color: #9b2c2c;
+    }
+
+.reparto-year-table tbody tr:hover td:not(.reparto-invalid-day) {
+    background-color: #f4f3ff;
+}
+
+.reparto-year-table tbody tr:hover td.reparto-year-weekend {
+    background-color: #e8e8e8 !important;
+}
+
+@media (max-width: 768px) {
+    .reparto-toolbar {
+        align-items: stretch;
+    }
+
+        .reparto-toolbar > .btn,
+        .reparto-view-toggle,
+        .reparto-view-toggle .btn {
+            width: 100%;
+        }
+
+    .reparto-view-toggle {
+        flex-direction: column;
+    }
+
+    .reparto-year-table th,
+    .reparto-year-table td {
+        min-width: 45px;
+    }
+
+    .reparto-year-month-column {
+        min-width: 120px !important;
+    }
+}

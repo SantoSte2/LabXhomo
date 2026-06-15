@@ -1,0 +1,174 @@
+/* Componenti riutilizzabili. */
+.marc-btn-primary {
+    padding: .75rem 1.5rem;
+    border: none;
+    border-radius: var(--marc-radius-small);
+    background: var(--marc-primary);
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.marc-btn-primary:hover {
+    background: var(--marc-primary-hover);
+    color: #ffffff;
+}
+
+.marc-btn-secondary {
+    min-width: 180px;
+    padding: .85rem 1.5rem;
+    border: none;
+    border-radius: var(--marc-radius-small);
+    background: var(--marc-card);
+    color: var(--marc-text);
+    box-shadow: var(--marc-shadow-small);
+}
+
+.marc-btn-secondary:hover {
+    background: #cfcfcf;
+    color: var(--marc-text);
+}
+
+.marc-btn-danger {
+    min-width: 120px;
+    padding: .42rem 1.4rem;
+    border: none;
+    border-radius: 999px;
+    background: var(--marc-danger);
+    color: #ffffff;
+}
+
+.marc-btn-danger:hover {
+    background: #b9221e;
+    color: #ffffff;
+}
+
+.marc-btn-approve {
+    width: 100%;
+    padding: .55rem 1rem;
+    border: none;
+    border-radius: var(--marc-radius-small);
+    background: #218838;
+    color: #ffffff;
+}
+
+.marc-btn-approve:hover {
+    background: #1b722f;
+    color: #ffffff;
+}
+
+.marc-btn-reject {
+    width: 100%;
+    padding: .55rem 1rem;
+    border: none;
+    border-radius: var(--marc-radius-small);
+    background: var(--marc-danger);
+    color: #ffffff;
+}
+
+.marc-btn-reject:hover {
+    background: #b9221e;
+    color: #ffffff;
+}
+
+.marc-panel {
+    background: var(--marc-surface);
+    border: 1px solid #645cff;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .05);
+}
+
+.marc-panel-title {
+    padding: .5rem 1rem;
+    border-bottom: 1px solid #645cff;
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.marc-status-badge {
+    min-width: 95px;
+    padding: .4rem .8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.marc-status-pending {
+    background: #fff1d6;
+    color: #9a5a00;
+}
+
+.marc-status-approved {
+    background: #dff3e6;
+    color: #176b36;
+}
+
+.marc-status-rejected {
+    background: #f8d7da;
+    color: #9b2c2c;
+}
+
+.marc-empty-state {
+    padding: 1rem;
+    border-radius: 10px;
+    background: #f4f4f4;
+    color: var(--marc-muted);
+    text-align: center;
+}
+
+.marc-calendar-dot {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    border-radius: 2px;
+}
+
+.marc-calendar-dot.marc-status-pending { background: #f0a000; }
+.marc-calendar-dot.marc-status-approved { background: #218838; }
+.marc-calendar-dot.marc-status-rejected { background: #d36b6b; }
+
+.marc-calendar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .9rem 1rem;
+    border-bottom: 1px solid var(--marc-border);
+    background: #f4f4f4;
+}
+
+.marc-calendar-current {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.marc-calendar-arrow {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--marc-primary);
+    color: #ffffff;
+    font-size: 1.8rem;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.marc-calendar-arrow:hover {
+    background: var(--marc-primary-hover);
+    color: #ffffff;
+}
+
+@media (max-width: 576px) {
+    .marc-panel-title {
+        font-size: 1.25rem;
+        text-align: center;
+    }
+
+    .marc-btn-secondary {
+        width: 100%;
+    }
+}

@@ -1,0 +1,70 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MarcTempo - Privacy</title>
+
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/marc-tempo.css" asp-append-version="true" />
+</head>
+
+<body class="marc-login-body">
+    <main class="marc-login-page">
+        <header class="marc-login-header">
+            <div class="marc-brand">
+                <div class="marc-brand-name">MarcTempo</div>
+                <div class="marc-brand-anchor">⚓</div>
+            </div>
+
+            <h1>Informativa Privacy</h1>
+        </header>
+
+        <section class="marc-privacy-content">
+            <article class="marc-privacy-card">
+                <h2>Gestione dei dati nel portale MarcTempo</h2>
+
+                <p>
+                    Il portale MarcTempo è un progetto dimostrativo per la gestione delle richieste
+                    relative a ferie, permessi, mancate timbrature e validazioni mensili.
+                </p>
+
+                <p>
+                    I dati inseriti vengono utilizzati esclusivamente per simulare il flusso interno
+                    di gestione delle presenze: inserimento richiesta da parte del dipendente,
+                    controllo da parte del Super e validazione finale del mese.
+                </p>
+
+                <p>
+                    Le informazioni trattate comprendono dati identificativi del dipendente,
+                    matricola, richieste inserite, periodo interessato, motivazione e stato della
+                    richiesta. Nel progetto attuale i dati sono gestiti localmente tramite database
+                    in memoria e non vengono trasmessi a servizi esterni.
+                </p>
+
+                <p>
+                    In un contesto aziendale reale, tali dati dovrebbero essere trattati secondo
+                    le policy interne, le regole di sicurezza informatica e la normativa applicabile
+                    in materia di protezione dei dati personali.
+                </p>
+
+                <div class="text-center mt-4">
+                    <a class="btn marc-btn-primary" href="@Url.Action("Login", "Login")">
+                        Torna al Login
+                    </a>
+                </div>
+            </article>
+        </section>
+
+        <footer class="marc-footer">
+            <div>Sede amministrativa e operativa: Via dei Matti, 0 - 99999 - Isola Evanescente</div>
+            <div>Sede legale: Via dei Matti, 1 - 99999 - Isola Evanescente</div>
+            <div>Registro Imprese XXX - Partita IVA e codice fiscale: 000111222333</div>
+        </footer>
+    </main>
+</body>
+</html>

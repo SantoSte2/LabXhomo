@@ -1,0 +1,173 @@
+﻿@model Template.Web.Features.Dipendente.RichiestaViewModel
+
+@{
+    Layout = null;
+    var isGiustificativo = Model.TipoSezione == "Giustificativo";
+}
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MarcTempo - Richiesta</title>
+
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/marc-tempo.css" asp-append-version="true" />
+</head>
+
+<body class="marc-app-body">
+    <div class="marc-app-page">
+
+        <<header class="marc-app-header marc-app-header-compact">
+            <div class="marc-brand marc-brand-header">
+                <div class="marc-brand-anchor">⚓</div>
+            </div>
+
+            <div class="marc-page-title">
+                <h1>MarcTempo</h1>
+                
+            </div>
+
+            <div class="marc-user-box marc-user-box-compact">
+                <div class="marc-user-meta">
+                    <div class="marc-employee-code-label">Codice dipendente</div>
+                    <div class="marc-employee-code">@Model.Matricola</div>
+
+                    <form method="post" action="@Url.Action("Logout", "Login")">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn marc-btn-danger">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+
+                <div class="marc-avatar marc-avatar-tooltip" data-tooltip="@Model.Nominativo">
+                    @Model.Iniziali
+                </div>
+            </div>
+        </header>
+
+        <main class="marc-app-main">
+            <section class="marc-request-card">
+
+                <div class="marc-request-tabs">
+                    <a class="marc-request-tab @(isGiustificativo ? "active" : "")"
+                       href="@Url.Action("Richiesta", "Dipendente", new { tipo = "Giustificativo" })">
+                        Giustificativo
+                    </a>
+
+                    <a class="marc-request-tab @(!isGiustificativo ? "active" : "")"
+                       href="@Url.Action("Richiesta", "Dipendente", new { tipo = "MancataTimbratura" })">
+                        Mancate Timbrature
+                    </a>
+                </div>
+
+                <form method="post" action="@Url.Action("Richiesta", "Dipendente")" class="marc-request-form">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.TipoSezione)
+
+                    @if (isGiustificativo)
+                    {
+                        <div class="marc-form-grid marc-form-grid-giustificativo">
+                            <div class="marc-form-group marc-wide">
+                                @Html.LabelFor(m => m.TipoGiustificativo, new { @class = "form-label" })
+                                @Html.DropDownListFor(
+                                m => m.TipoGiustificativo,
+                                                        Model.TipiGiustificativo,
+                                                        "-",
+                                                        new { @class = "form-select" })
+                            @Html.ValidationMessageFor(m => m.TipoGiustificativo, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="marc-form-group">
+                            @Html.LabelFor(m => m.DataInizio, new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.DataInizio, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                            @Html.ValidationMessageFor(m => m.DataInizio, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="marc-form-group">
+                            @Html.LabelFor(m => m.DataFine, new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.DataFine, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                            @Html.ValidationMessageFor(m => m.DataFine, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="marc-form-group">
+                            @Html.LabelFor(m => m.OraInizio, new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.OraInizio, new { @class = "form-control", type = "time" })
+                            @Html.ValidationMessageFor(m => m.OraInizio, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="marc-form-group">
+                            @Html.LabelFor(m => m.OraFine, new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.OraFine, new { @class = "form-control", type = "time" })
+                            @Html.ValidationMessageFor(m => m.OraFine, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="marc-form-group marc-wide">
+                            @Html.LabelFor(m => m.Motivazione, new { @class = "form-label" })
+                            @Html.TextAreaFor(m => m.Motivazione, new { @class = "form-control", rows = "4", placeholder = "Inserisci eventuali note..." })
+                            @Html.ValidationMessageFor(m => m.Motivazione, "", new { @class = "text-danger small" })
+                        </div>
+                    </div>
+                                        }
+                    else
+                    {
+                        <div class="marc-form-grid marc-form-grid-timbratura">
+                            <div class="marc-form-group">
+                                <label class="form-label">Giorno</label>
+                                @Html.TextBoxFor(m => m.DataInizio, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                                @Html.ValidationMessageFor(m => m.DataInizio, "", new { @class = "text-danger small" })
+                            </div>
+
+                            <div class="marc-form-group">
+                                @Html.LabelFor(m => m.TipoMancataTimbratura, new { @class = "form-label" })
+                                @Html.DropDownListFor(
+                                m => m.TipoMancataTimbratura,
+                                                        Model.TipiMancataTimbratura,
+                                                        "-",
+                                                        new { @class = "form-select" })
+                            @Html.ValidationMessageFor(m => m.TipoMancataTimbratura, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="marc-form-group">
+                            <label class="form-label">Ora</label>
+                            @Html.TextBoxFor(m => m.OraInizio, new { @class = "form-control", type = "time" })
+                            @Html.ValidationMessageFor(m => m.OraInizio, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="marc-form-group marc-check-group">
+                            <label class="form-label">Post notturno</label>
+                            <div class="form-check">
+                                @Html.CheckBoxFor(m => m.PostNotturno, new { @class = "form-check-input" })
+                                <label class="form-check-label" for="PostNotturno">Sì</label>
+                            </div>
+                        </div>
+
+                        <div class="marc-form-group marc-wide">
+                            @Html.LabelFor(m => m.Motivazione, new { @class = "form-label" })
+                            @Html.TextAreaFor(m => m.Motivazione, new { @class = "form-control", rows = "4" })
+                            @Html.ValidationMessageFor(m => m.Motivazione, "", new { @class = "text-danger small" })
+                        </div>
+                    </div>
+                                        }
+
+                    <div class="marc-request-actions">
+                        <a class="btn marc-btn-secondary" href="@Url.Action("Index", "Dipendente")">
+                            Torna alla Home
+                        </a>
+
+                        <button type="submit" class="btn marc-btn-primary">
+                            Conferma
+                        </button>
+                    </div>
+                </form>
+
+            </section>
+        </main>
+
+        
+
+    </div>
+</body>
+</html>

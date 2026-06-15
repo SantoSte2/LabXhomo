@@ -1,0 +1,18 @@
+:root {
+    --marc-bg: #f7f7f7;
+    --marc-surface: #ffffff;
+    --marc-header: #dddddd;
+    --marc-card: #e0e0e0;
+    --marc-primary: #2f22e8;
+    --marc-primary-hover: #2418c9;
+    --marc-danger: #db2b25;
+    --marc-text: #1f1f1f;
+    --marc-muted: #666666;
+    --marc-border: #d6d6d6;
+    --marc-grid: #aaa6e8;
+    --marc-radius-small: 8px;
+    --marc-radius-medium: 12px;
+    --marc-radius-large: 16px;
+    --marc-shadow-small: 0 6px 16px rgba(0, 0, 0, .08);
+    --marc-shadow-medium: 0 12px 30px rgba(0, 0, 0, .08);
+}

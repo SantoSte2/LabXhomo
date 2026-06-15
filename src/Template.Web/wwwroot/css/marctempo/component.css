@@ -1,0 +1,95 @@
+﻿/*
+ * Componenti riutilizzati in più pagine:
+ * pulsanti, pannelli, badge di stato ed elementi vuoti.
+ */
+
+.marc-btn-primary {
+    padding: .75rem 1.5rem;
+    border: none;
+    border-radius: var(--marc-radius-small);
+    background: var(--marc-primary);
+    color: #ffffff;
+    font-weight: 500;
+}
+
+    .marc-btn-primary:hover {
+        background: var(--marc-primary-hover);
+        color: #ffffff;
+    }
+
+.marc-btn-secondary {
+    min-width: 180px;
+    padding: .85rem 1.5rem;
+    border: none;
+    border-radius: var(--marc-radius-small);
+    background: var(--marc-card);
+    color: var(--marc-text);
+    box-shadow: var(--marc-shadow-small);
+}
+
+    .marc-btn-secondary:hover {
+        background: #cfcfcf;
+        color: var(--marc-text);
+    }
+
+.marc-btn-danger {
+    min-width: 120px;
+    padding: .42rem 1.4rem;
+    border: none;
+    border-radius: 999px;
+    background: var(--marc-danger);
+    color: #ffffff;
+}
+
+    .marc-btn-danger:hover {
+        background: #b9221e;
+        color: #ffffff;
+    }
+
+.marc-panel {
+    background: var(--marc-surface);
+    border: 1px solid #645cff;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .05);
+}
+
+.marc-panel-title {
+    padding: .5rem 1rem;
+    border-bottom: 1px solid #645cff;
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.marc-status-badge {
+    min-width: 95px;
+    padding: .4rem .8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.marc-status-pending {
+    background: #fff1d6;
+    color: #9a5a00;
+}
+
+.marc-status-approved {
+    background: #dff3e6;
+    color: #176b36;
+}
+
+.marc-status-rejected {
+    background: #f8d7da;
+    color: #9b2c2c;
+}
+
+.marc-empty-state {
+    padding: 1rem;
+    border-radius: 10px;
+    background: #f4f4f4;
+    color: var(--marc-muted);
+    text-align: center;
+}

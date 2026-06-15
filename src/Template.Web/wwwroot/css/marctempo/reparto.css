@@ -1,0 +1,696 @@
+/* Calendario ferie di reparto: vista mensile e annuale. */
+.marc-colleagues-page { max-width: 100%; }
+
+.marc-colleagues-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.marc-colleagues-heading h2 { margin: 0; font-size: 1.8rem; }
+.marc-colleagues-heading p { margin: .25rem 0 0; color: var(--marc-muted); }
+
+.reparto-toolbar,
+.marc-page-switch-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.75rem;
+}
+
+.reparto-view-toggle {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    flex-wrap: wrap;
+}
+
+.reparto-view-toggle .btn,
+.marc-page-switch-actions .btn { min-width: 160px; }
+
+.marc-colleagues-nav,
+.reparto-month-navigation,
+.reparto-year-navigation {
+    max-width: 880px;
+    margin: 1rem auto 2rem;
+    border: 1px solid var(--marc-border);
+    border-radius: var(--marc-radius-medium);
+}
+
+/* ---------- Vista mensile ---------- */
+.marc-colleagues-table-wrapper,
+#calendario-colleghi {
+    width: 100%;
+    overflow-x: auto;
+    border: 2px solid #111111;
+    border-radius: var(--marc-radius-medium);
+    background: var(--marc-surface);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .06);
+}
+
+.marc-colleagues-table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    empty-cells: show;
+}
+
+.marc-colleagues-table th,
+.marc-colleagues-table td {
+    border-right: 1px solid var(--marc-grid);
+    border-bottom: 1px solid var(--marc-grid);
+}
+
+.marc-colleagues-table thead th { border-bottom: 2px solid #645cff; }
+
+.marc-colleague-name-column {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    min-width: 230px;
+    max-width: 260px;
+    padding: .75rem;
+    border-right: 3px solid #645cff !important;
+    background: var(--marc-surface);
+    text-align: left;
+}
+
+thead .marc-colleague-name-column { z-index: 6; background: #f4f4f4; }
+.marc-colleague-name-column strong { display: block; font-size: .95rem; }
+.marc-colleague-name-column span { display: block; margin-top: .15rem; color: var(--marc-muted); font-size: .8rem; }
+
+.marc-colleague-day-header,
+.reparto-day-header,
+.marc-colleague-day-cell,
+.reparto-day-cell {
+    min-width: 48px;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.marc-colleague-day-header,
+.reparto-day-header {
+    height: 58px;
+    background: #f4f4f4;
+    font-size: .82rem;
+}
+
+.marc-colleague-day-header span,
+.reparto-day-header span { display: block; font-weight: 800; }
+
+.marc-colleague-day-header small,
+.reparto-day-header small { display: block; color: var(--marc-muted); font-size: .68rem; }
+
+.marc-colleagues-table .marc-is-weekend,
+.marc-colleagues-table .reparto-is-weekend {
+    background-color: #eeeeee !important;
+    background-image: repeating-linear-gradient(
+        135deg,
+        rgba(0, 0, 0, .10) 0,
+        rgba(0, 0, 0, .10) 2px,
+        transparent 2px,
+        transparent 8px
+    ) !important;
+    color: #707070 !important;
+}
+
+.marc-colleagues-table .marc-is-today,
+.marc-colleagues-table .reparto-is-today {
+    position: relative;
+    z-index: 2;
+    outline: 3px solid var(--marc-primary);
+    outline-offset: -3px;
+}
+
+.marc-colleagues-table .marc-is-today.marc-is-weekend,
+.marc-colleagues-table .reparto-is-today.reparto-is-weekend {
+    background-color: #ebe9ff !important;
+    background-image: repeating-linear-gradient(
+        135deg,
+        rgba(47, 34, 232, .18) 0,
+        rgba(47, 34, 232, .18) 2px,
+        transparent 2px,
+        transparent 8px
+    ) !important;
+}
+
+.marc-colleague-dots {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .18rem;
+    padding: .15rem;
+}
+
+.marc-colleagues-table tbody tr:hover td:not(.marc-is-weekend):not(.reparto-is-weekend):not(.marc-is-today):not(.reparto-is-today) {
+    background: #f4f3ff;
+}
+
+.marc-colleagues-table tbody tr:hover .marc-colleague-name-column { background: #f4f3ff; }
+
+.marc-colleagues-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    color: var(--marc-muted);
+    font-size: .9rem;
+}
+
+.marc-colleagues-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+}
+
+/* ---------- Vista annuale ---------- */
+.reparto-year-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 2px solid #645cff;
+    border-radius: var(--marc-radius-medium);
+    background: var(--marc-surface);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .07);
+}
+
+.reparto-year-table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.reparto-year-table th,
+.reparto-year-table td {
+    min-width: 52px;
+    height: 50px;
+    padding: .25rem;
+    border-right: 1px solid var(--marc-grid);
+    border-bottom: 1px solid var(--marc-grid);
+    text-align: center;
+    vertical-align: middle;
+}
+
+.reparto-year-table thead th {
+    height: 46px;
+    border-bottom: 2px solid #645cff;
+    background: #f4f4f4;
+    font-weight: 800;
+}
+
+.reparto-year-month-column {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    min-width: 150px !important;
+    padding-left: .75rem !important;
+    border-right: 3px solid #645cff !important;
+    background: var(--marc-surface);
+    text-align: left !important;
+}
+
+thead .reparto-year-month-column { z-index: 6; background: #f4f4f4; }
+.reparto-year-month-column a { color: var(--marc-text); font-weight: 700; text-decoration: none; }
+.reparto-year-month-column a:hover { color: var(--marc-primary); text-decoration: underline; }
+
+.reparto-year-weekend {
+    background-color: #eeeeee !important;
+    background-image: repeating-linear-gradient(
+        135deg,
+        rgba(0, 0, 0, .09) 0,
+        rgba(0, 0, 0, .09) 2px,
+        transparent 2px,
+        transparent 8px
+    ) !important;
+}
+
+.reparto-invalid-day {
+    background-color: #d9d9d9 !important;
+    background-image: repeating-linear-gradient(
+        45deg,
+        rgba(0, 0, 0, .14) 0,
+        rgba(0, 0, 0, .14) 2px,
+        transparent 2px,
+        transparent 6px
+    ) !important;
+}
+
+.reparto-year-today {
+    position: relative;
+    z-index: 2;
+    box-shadow: inset 0 0 0 3px var(--marc-primary);
+}
+
+.reparto-current-month .reparto-year-month-column {
+    background: #ebe9ff;
+    color: var(--marc-primary);
+}
+
+.reparto-year-initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .2rem;
+}
+
+.reparto-year-initial {
+    min-width: 25px;
+    height: 23px;
+    padding: 0 .25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    font-size: .68rem;
+    font-weight: 800;
+    cursor: help;
+}
+
+.reparto-year-initial.marc-status-pending { background: #fff1d6; color: #9a5a00; }
+.reparto-year-initial.marc-status-approved { background: #dff3e6; color: #176b36; }
+.reparto-year-initial.marc-status-rejected { background: #f8d7da; color: #9b2c2c; }
+
+.reparto-year-table tbody tr:hover td:not(.reparto-invalid-day):not(.reparto-year-weekend):not(.reparto-year-today) {
+    background: #f4f3ff;
+}
+
+@media (max-width: 768px) {
+    .marc-colleagues-heading {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .reparto-toolbar,
+    .marc-page-switch-actions {
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .reparto-toolbar > .btn,
+    .reparto-view-toggle,
+    .reparto-view-toggle .btn,
+    .marc-page-switch-actions .btn { width: 100%; }
+
+    .reparto-view-toggle { flex-direction: column; }
+    .marc-colleague-name-column { min-width: 190px; }
+
+    .marc-colleague-day-header,
+    .reparto-day-header,
+    .marc-colleague-day-cell,
+    .reparto-day-cell { min-width: 41px; }
+
+    .reparto-year-table th,
+    .reparto-year-table td { min-width: 45px; }
+
+    .reparto-year-month-column { min-width: 120px !important; }
+}
+/* =========================================================
+   WEEKEND E FESTIVITÀ - VISTA MENSILE
+
+   Queste regole aggiungono:
+   - il nome completo di sabato e domenica;
+   - il nome delle festività;
+   - una linea colorata distinta per festività civili e religiose.
+   ========================================================= */
+
+/*
+ * Rendiamo leggermente più larghe le colonne dei giorni.
+ * La tabella dispone già dello scorrimento orizzontale,
+ * quindi questo non rovina la visualizzazione su schermi piccoli.
+ */
+.marc-colleague-day-header,
+.reparto-day-header,
+.marc-colleague-day-cell,
+.reparto-day-cell {
+    min-width: 62px;
+}
+
+/* Numero del giorno, visualizzato nella parte superiore della cella. */
+.reparto-day-number {
+    display: block;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+/*
+ * Nome del giorno della settimana.
+ * Sabato e Domenica vengono scritti per esteso dalla View.
+ */
+.reparto-weekday-name {
+    display: block;
+    margin-top: .15rem;
+    font-size: .62rem;
+    line-height: 1.1;
+    color: var(--marc-muted);
+}
+
+/* Il fine settimana viene evidenziato con un testo più marcato. */
+.reparto-weekend-name {
+    color: #5f5f5f;
+    font-weight: 800;
+}
+
+/*
+ * Variabile locale usata per scegliere il colore della festività.
+ * Il colore cambia a seconda della classe civile o religiosa.
+ */
+.reparto-holiday-civil {
+    --reparto-holiday-color: #2f22e8;
+}
+
+.reparto-holiday-religious {
+    --reparto-holiday-color: #8a3fb0;
+}
+
+/*
+ * La festività viene indicata con una fascia colorata inferiore.
+ * La fascia non cancella la rigatura già usata per i weekend.
+ */
+.reparto-is-holiday {
+    position: relative;
+    box-shadow: inset 0 -5px 0 var(--reparto-holiday-color);
+}
+
+/*
+ * Nome della festività mostrato nell'intestazione.
+ * Può andare su più righe per nomi lunghi come
+ * "Festa della Liberazione".
+ */
+.reparto-holiday-name {
+    display: block;
+    max-width: 76px;
+    max-height: 2.4em;
+    margin: .2rem auto 0;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    color: var(--reparto-holiday-color);
+    font-size: .52rem;
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+/*
+ * Quando una festività coincide con sabato o domenica,
+ * manteniamo sia la rigatura del weekend sia la fascia colorata.
+ */
+.marc-colleagues-table .reparto-is-weekend.reparto-is-holiday {
+    box-shadow: inset 0 -5px 0 var(--reparto-holiday-color);
+}
+
+/*
+ * Il giorno corrente mantiene il bordo principale,
+ * anche quando è contemporaneamente una festività.
+ */
+.marc-colleagues-table
+.reparto-is-today.reparto-is-holiday {
+    outline: 3px solid var(--marc-primary);
+    outline-offset: -3px;
+}
+
+/* Piccolo indicatore usato nella legenda sotto il calendario. */
+.reparto-holiday-legend {
+    width: 18px;
+    height: 9px;
+    display: inline-block;
+    border-radius: 3px;
+    background: var(--reparto-holiday-color);
+}
+
+/* Su dispositivi piccoli riduciamo leggermente le colonne. */
+@media (max-width: 768px) {
+    .marc-colleague-day-header,
+    .reparto-day-header,
+    .marc-colleague-day-cell,
+    .reparto-day-cell {
+        min-width: 55px;
+    }
+
+    .reparto-weekday-name {
+        font-size: .56rem;
+    }
+
+    .reparto-holiday-name {
+        max-width: 66px;
+        font-size: .48rem;
+    }
+}
+
+/* =========================================================
+   WEEKEND E FESTIVITÀ - VISTA ANNUALE
+
+   Le celle annuali sono più compatte di quelle mensili.
+   Per questo utilizziamo:
+   - SAB e DOM per il fine settimana;
+   - CIV e REL per la categoria della festività;
+   - un tooltip per il nome completo della festa.
+   ========================================================= */
+
+/*
+ * La cella deve contenere sia le etichette informative
+ * sia le eventuali iniziali dei dipendenti.
+ *
+ * Aumentiamo leggermente l'altezza rispetto alla vecchia
+ * configurazione da 50px.
+ */
+.reparto-year-table td.reparto-year-day-cell {
+    height: 68px;
+    padding: .2rem;
+    position: relative;
+}
+
+/*
+ * Contenitore superiore delle etichette:
+ * SAB, DOM, CIV e REL.
+ */
+.reparto-year-cell-labels {
+    min-height: 16px;
+    margin-bottom: .2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .15rem;
+}
+
+/*
+ * Etichetta grigia per sabato e domenica.
+ */
+.reparto-year-weekend-label {
+    min-width: 25px;
+    padding: .08rem .2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: rgba(90, 90, 90, .15);
+    color: #5f5f5f;
+    font-size: .51rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+/*
+ * Etichetta CIV oppure REL.
+ *
+ * Il colore viene preso dalla variabile impostata
+ * dalle classi reparto-holiday-civil e
+ * reparto-holiday-religious.
+ */
+.reparto-year-holiday-label {
+    min-width: 25px;
+    padding: .08rem .2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--reparto-holiday-color);
+    border-radius: 4px;
+    background: #ffffff;
+    color: var(--reparto-holiday-color);
+    font-size: .51rem;
+    font-weight: 800;
+    line-height: 1.2;
+    cursor: help;
+}
+
+/*
+ * Manteniamo la distinzione già usata nella vista mensile:
+ * blu per le festività civili;
+ * viola per le festività religiose.
+ */
+.reparto-year-table td.reparto-is-holiday {
+    box-shadow: inset 0 -5px 0 var(--reparto-holiday-color);
+}
+
+/*
+ * Quando la festività coincide con sabato o domenica,
+ * la rigatura del weekend resta visibile.
+ * La fascia colorata rimane nella parte inferiore.
+ */
+.reparto-year-table
+td.reparto-year-weekend.reparto-is-holiday {
+    box-shadow: inset 0 -5px 0 var(--reparto-holiday-color);
+}
+
+/*
+ * Quando il giorno corrente è anche festivo,
+ * combiniamo:
+ * - il bordo del giorno corrente;
+ * - la fascia blu o viola della festività.
+ *
+ * Senza questa regola un box-shadow sostituirebbe l'altro.
+ */
+.reparto-year-table
+td.reparto-year-today.reparto-is-holiday {
+    box-shadow: inset 0 0 0 3px var(--marc-primary), inset 0 -5px 0 var(--reparto-holiday-color);
+}
+
+/*
+ * Le iniziali restano sotto le etichette e sopra
+ * gli sfondi utilizzati per weekend e festività.
+ */
+.reparto-year-table .reparto-year-initials {
+    position: relative;
+    z-index: 3;
+}
+
+/*
+ * Simbolo del weekend utilizzato nella legenda.
+ */
+.reparto-weekend-legend {
+    width: 18px;
+    height: 10px;
+    display: inline-block;
+    border-radius: 3px;
+    background-color: #eeeeee;
+    background-image: repeating-linear-gradient( 135deg, rgba(0, 0, 0, .10) 0, rgba(0, 0, 0, .10) 2px, transparent 2px, transparent 6px );
+}
+
+/*
+ * Manteniamo un po' di spazio tra la tabella annuale
+ * e la relativa legenda.
+ */
+.reparto-year-legend {
+    margin-top: 1.25rem;
+}
+
+/*
+ * Su schermi piccoli riduciamo leggermente altezza,
+ * testi e spaziatura, mantenendo comunque leggibili
+ * le quattro abbreviazioni.
+ */
+@media (max-width: 768px) {
+    .reparto-year-table td.reparto-year-day-cell {
+        height: 62px;
+    }
+
+    .reparto-year-weekend-label,
+    .reparto-year-holiday-label {
+        min-width: 22px;
+        font-size: .46rem;
+    }
+    /* =========================================================
+   FIX DEFINITIVO TESTATA - CALENDARIO COLLEGHI MENSILE
+
+   Il nome della festività viene posizionato sopra il bordo
+   inferiore della testata, senza aumentare troppo la riga.
+   ========================================================= */
+
+    /*
+ * La cella della testata diventa il riferimento
+ * per posizionare il nome della festività.
+ */
+    .marc-colleagues-table > thead > tr > th.reparto-day-header,
+    .marc-colleagues-table > thead > tr > th.marc-colleague-day-header {
+        position: relative !important;
+        height: 78px !important;
+        min-height: 78px !important;
+        /*
+     * Lo spazio inferiore viene riservato
+     * al nome dell'eventuale festività.
+     */
+        padding: .35rem .2rem 1.7rem !important;
+        vertical-align: top !important;
+        overflow: hidden !important;
+    }
+
+    /*
+ * Rendiamo il bordo inferiore più leggero.
+ * Il selettore è molto specifico per prevalere
+ * sulle vecchie regole presenti nel file.
+ */
+    .marc-colleagues-table > thead > tr > th {
+        border-bottom: 1px solid #aaa6ff !important;
+    }
+
+    /*
+ * Numero e nome del giorno restano
+ * nella parte superiore della testata.
+ */
+    .marc-colleagues-table thead .reparto-day-number {
+        display: block !important;
+        margin: 0 !important;
+        line-height: 1 !important;
+    }
+
+    .marc-colleagues-table thead .reparto-weekday-name {
+        display: block !important;
+        margin-top: .15rem !important;
+        line-height: 1 !important;
+    }
+
+    /*
+ * Il nome della festività viene estratto
+ * dal normale flusso della cella.
+ *
+ * In questo modo non può più scendere
+ * sopra il bordo della tabella.
+ */
+    .marc-colleagues-table thead .reparto-holiday-name {
+        position: absolute !important;
+        left: 3px !important;
+        right: 3px !important;
+        bottom: 7px !important;
+        z-index: 10 !important;
+        display: block !important;
+        width: auto !important;
+        max-width: none !important;
+        max-height: 2.2em !important;
+        margin: 0 !important;
+        padding: 0 .1rem !important;
+        overflow: hidden !important;
+        overflow-wrap: anywhere !important;
+        white-space: normal !important;
+        /*
+     * Lo sfondo copre qualsiasi eventuale linea
+     * presente dietro al testo.
+     */
+        background-color: #f4f4f4 !important;
+        color: var(--reparto-holiday-color) !important;
+        font-size: .48rem !important;
+        font-weight: 800 !important;
+        line-height: 1.05 !important;
+        text-align: center !important;
+    }
+
+    /*
+ * Rimuoviamo eventuali vecchie fasce create
+ * tramite box-shadow soltanto dalla testata.
+ *
+ * Nelle celle dei dipendenti la fascia colorata
+ * continua invece a rimanere visibile.
+ */
+    .marc-colleagues-table > thead > tr > th.reparto-is-holiday,
+    .marc-colleagues-table > thead > tr > th.marc-is-holiday {
+        box-shadow: none !important;
+    }

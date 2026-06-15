@@ -1,0 +1,116 @@
+﻿@model Template.Web.Features.Dipendente.ConfermaRichiestaViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MarcTempo - Conferma Richiesta</title>
+
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/marc-tempo.css" asp-append-version="true" />
+</head>
+
+<body class="marc-app-body">
+    <div class="marc-app-page">
+
+        <header class="marc-app-header marc-app-header-compact">
+            <div class="marc-brand marc-brand-header">
+                <div class="marc-brand-anchor">⚓</div>
+            </div>
+
+            <div class="marc-page-title">
+                <h1>MarcTempo</h1>
+                
+            </div>
+
+            <div class="marc-user-box marc-user-box-compact">
+                <div class="marc-user-meta">
+                    <div class="marc-employee-code-label">Codice dipendente</div>
+                    <div class="marc-employee-code">@Model.Matricola</div>
+
+                    <form method="post" action="@Url.Action("Logout", "Login")">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn marc-btn-danger">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+
+                <div class="marc-avatar marc-avatar-tooltip" data-tooltip="@Model.Nominativo">
+                    @Model.Iniziali
+                </div>
+            </div>
+        </header>
+
+        <main class="marc-confirm-main">
+            <section class="marc-confirm-box">
+                <h2>Riepilogo richiesta</h2>
+
+                <div class="marc-confirm-row">
+                    <span>Tipo richiesta</span>
+                    <strong>@Model.TipoRichiesta</strong>
+                </div>
+
+                <div class="marc-confirm-row">
+                    <span>Dettaglio</span>
+                    <strong>@Model.DettaglioRichiesta</strong>
+                </div>
+
+                <div class="marc-confirm-row">
+                    <span>Periodo</span>
+                    <strong>@Model.Periodo</strong>
+                </div>
+
+                <div class="marc-confirm-row">
+                    <span>Orario</span>
+                    <strong>@Model.Orario</strong>
+                </div>
+
+                <div class="marc-confirm-row">
+                    <span>Motivazione</span>
+                    <strong>@Model.Motivazione</strong>
+                </div>
+
+                <div class="marc-confirm-row">
+                    <span>Stato</span>
+                    <strong class="marc-status-pending">@Model.Stato</strong>
+                </div>
+
+                <div class="marc-confirm-actions">
+
+                    <form method="post"
+                          action="@Url.Action("ConfermaModifiche", "Dipendente")">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn marc-btn-primary">
+                            Conferma modifiche
+                        </button>
+                    </form>
+
+                    <form method="post"
+                          action="@Url.Action("AnnullaModifiche", "Dipendente")">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn marc-btn-cancel">
+                            Annulla modifiche
+                        </button>
+                    </form>
+
+                </div>
+            </section>
+        </main>
+
+        
+
+    </div>
+</body>
+</html>

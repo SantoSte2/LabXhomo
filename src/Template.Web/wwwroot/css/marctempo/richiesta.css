@@ -1,0 +1,232 @@
+/* Form richiesta e pagina di conferma. */
+.marc-request-card {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-radius: 14px;
+    background: var(--marc-surface);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, .08);
+}
+
+.marc-request-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.marc-request-tab {
+    min-width: 210px;
+    padding: .9rem 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: var(--marc-card);
+    color: var(--marc-text);
+    text-decoration: none;
+    box-shadow: var(--marc-shadow-small);
+}
+
+.marc-request-tab:hover { background: #cfcfcf; color: var(--marc-text); }
+.marc-request-tab.active { background: var(--marc-primary); color: #ffffff; }
+
+.marc-request-form { width: 100%; }
+
+.marc-form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem 2rem;
+}
+
+.marc-wide { grid-column: 1 / -1; }
+
+.marc-form-group .form-control,
+.marc-form-group .form-select {
+    min-height: 42px;
+    border: 1px solid var(--marc-border);
+    border-radius: var(--marc-radius-small);
+}
+
+.marc-form-group textarea { resize: vertical; }
+
+.marc-check-group .form-check {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.marc-request-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+.marc-confirm-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    background: linear-gradient(rgba(255,255,255,.72), rgba(255,255,255,.72));
+}
+
+.marc-confirm-box {
+    width: 100%;
+    max-width: 560px;
+    padding: 2rem;
+    border: 2px solid var(--marc-primary);
+    border-radius: var(--marc-radius-medium);
+    background: var(--marc-surface);
+    box-shadow: 10px 12px 0 rgba(0, 0, 0, .18);
+}
+
+.marc-confirm-box h2 {
+    margin-bottom: 1.75rem;
+    text-align: center;
+}
+
+.marc-confirm-row {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: 1rem;
+    padding: .65rem 0;
+    border-bottom: 1px solid var(--marc-border);
+}
+
+.marc-confirm-row span { color: var(--marc-muted); }
+
+.marc-confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 992px) {
+    .marc-form-grid { grid-template-columns: repeat(2, 1fr); }
+    .marc-request-tabs { gap: 1rem; }
+}
+
+@media (max-width: 576px) {
+    .marc-request-card { padding: 1.25rem; }
+
+    .marc-request-tabs {
+        flex-direction: column;
+        margin-bottom: 2rem;
+    }
+
+    .marc-request-tab { width: 100%; }
+    .marc-form-grid { grid-template-columns: 1fr; }
+
+    .marc-request-actions,
+    .marc-confirm-actions { flex-direction: column; }
+
+    .marc-request-actions .btn,
+    .marc-confirm-actions .btn { width: 100%; }
+
+    .marc-confirm-row { grid-template-columns: 1fr; gap: .15rem; }
+    .marc-confirm-box { box-shadow: 6px 8px 0 rgba(0, 0, 0, .18); }
+}
+/* Azioni della pagina di conferma */
+.marc-confirm-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+    .marc-confirm-actions form {
+        margin: 0;
+    }
+
+    .marc-confirm-actions .btn {
+        min-width: 190px;
+    }
+
+/* Rosso attenuato, distinto dal pulsante principale. */
+.marc-btn-cancel {
+    padding: .75rem 1.5rem;
+    border: none;
+    border-radius: var(--marc-radius-small);
+    background: #d9534f;
+    color: #ffffff;
+    font-weight: 500;
+    box-shadow: var(--marc-shadow-small);
+}
+
+    .marc-btn-cancel:hover {
+        background: #bd3f3b;
+        color: #ffffff;
+    }
+
+@media (max-width: 576px) {
+    .marc-confirm-actions {
+        flex-direction: column;
+    }
+
+        .marc-confirm-actions form,
+        .marc-confirm-actions .btn {
+            width: 100%;
+        }
+}
+
+/* Pulsanti della pagina di riepilogo e conferma. */
+
+.marc-confirm-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+    .marc-confirm-actions form {
+        margin: 0;
+    }
+
+    .marc-confirm-actions .btn {
+        min-width: 220px;
+        min-height: 58px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--marc-radius-small);
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    /*
+     * Selettore volutamente specifico:
+     * evita che Bootstrap o altre regole generiche annullino il rosso.
+     */
+    .marc-confirm-actions button.marc-btn-cancel {
+        border: none;
+        background-color: #d9534f;
+        color: #ffffff;
+        box-shadow: var(--marc-shadow-small);
+    }
+
+        .marc-confirm-actions button.marc-btn-cancel:hover {
+            background-color: #bd3f3b;
+            color: #ffffff;
+        }
+
+        .marc-confirm-actions button.marc-btn-cancel:focus {
+            outline: 3px solid rgba(217, 83, 79, .28);
+            outline-offset: 2px;
+        }
+
+@media (max-width: 576px) {
+    .marc-confirm-actions {
+        flex-direction: column;
+    }
+
+        .marc-confirm-actions form,
+        .marc-confirm-actions .btn {
+            width: 100%;
+        }
+}

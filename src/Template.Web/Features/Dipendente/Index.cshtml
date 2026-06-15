@@ -1,0 +1,297 @@
+﻿@model Template.Web.Features.Dipendente.HomeDipendenteViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MarcTempo - Home Dipendente</title>
+
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/marc-tempo.css" asp-append-version="true" />
+</head>
+
+<body class="marc-app-body">
+    <div class="marc-app-page">
+
+        <header class="marc-app-header marc-app-header-compact">
+            <div class="marc-brand marc-brand-header">
+                <div class="marc-brand-anchor">⚓</div>
+            </div>
+
+            <div class="marc-page-title">
+                <h1>MarcTempo</h1>
+                
+            </div>
+
+            <div class="marc-user-box marc-user-box-compact">
+                <div class="marc-user-meta">
+                    <div class="marc-employee-code-label">Codice dipendente</div>
+                    <div class="marc-employee-code">@Model.Matricola</div>
+
+                    <form method="post" action="@Url.Action("Logout", "Login")">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn marc-btn-danger">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+
+                <div class="marc-avatar marc-avatar-tooltip" data-tooltip="@Model.Nominativo">
+                    @Model.Iniziali
+                </div>
+            </div>
+        </header>
+
+        <main class="marc-app-main">
+            <section class="marc-dashboard-grid">
+
+                <article id="calendario" class="marc-panel marc-month-panel marc-calendar-card">
+                    
+
+                    <div class="marc-calendar-widget">
+
+                        <div class="marc-calendar-nav">
+                            <a class="marc-calendar-arrow"
+                               href="@(Url.Action("Index", "Dipendente", new { mese = Model.MesePrecedente, anno = Model.AnnoMesePrecedente }) + "#calendario")">
+                                ‹
+                            </a>
+
+                            <div class="marc-calendar-current">
+                                @Model.MeseCorrente @Model.AnnoCorrente
+                            </div>
+
+                            <a class="marc-calendar-arrow"
+                               href="@(Url.Action("Index", "Dipendente", new { mese = Model.MeseSuccessivo, anno = Model.AnnoMeseSuccessivo }) + "#calendario")">
+                                ›
+                            </a>
+                        </div>
+
+                        <div class="marc-calendar-weekdays">
+                            <span>Lun</span>
+                            <span>Mar</span>
+                            <span>Mer</span>
+                            <span>Gio</span>
+                            <span>Ven</span>
+                            <span>Sab</span>
+                            <span>Dom</span>
+                        </div>
+
+                        <div class="marc-calendar-grid">
+                            @foreach (var giorno in Model.GiorniCalendario)
+                            {
+                                /*
+                                * Costruiamo la classe CSS in una variabile unica.
+                                * In questo modo evitiamo virgolette o parentesi Razor
+                                * spezzate all'interno del tag HTML.
+                                */
+                                var classiGiorno = "marc-calendar-day";
+
+                                if (!giorno.AppartieneAlMese)
+                                {
+                                    classiGiorno += " muted";
+                                }
+
+                                if (giorno.Oggi)
+                                {
+                                    classiGiorno += " today";
+                                }
+
+                                if (giorno.HaEventi)
+                                {
+                                    classiGiorno += " has-events";
+                                }
+
+                                if (giorno.FestivoNazionale)
+                                {
+                                    classiGiorno +=
+                                    " marc-is-holiday " +
+                                    giorno.ClasseFestivita;
+                                }
+
+                                /*
+                                * Nei giorni normali il title rimane vuoto.
+                                * Nei festivi contiene il nome completo della festa.
+                                */
+                                var tooltipGiorno = giorno.FestivoNazionale
+                                ? giorno.NomeFestivita
+                                : string.Empty;
+
+                                <div class="@classiGiorno"
+                                     title="@tooltipGiorno">
+
+                                    <div class="marc-calendar-day-number">
+                                        @giorno.NumeroGiorno
+                                    </div>
+
+                                    @if (giorno.FestivoNazionale)
+                                    {
+                                        <div class="marc-calendar-holiday-name">
+                                            @giorno.NomeFestivita
+                                        </div>
+                                    }
+
+                                    @if (giorno.HaEventi)
+                                    {
+                                        <div class="marc-calendar-events">
+                                            @foreach (var evento in giorno.Eventi.Take(2))
+                                            {
+                                                <div class="marc-calendar-event @evento.StatoCssClass">
+                                                    @evento.Testo
+                                                </div>
+                                            }
+
+                                        </div>
+                                        <div class="marc-calendar-dots" title="@giorno.Eventi.Count richiesta/e">
+                                            @foreach (var evento in giorno.Eventi)
+                                            {
+                                                <span class="marc-calendar-dot @evento.StatoCssClass"></span>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </article>
+
+                <section class="marc-side-column">
+
+                    <article class="marc-panel">
+                        <div class="marc-panel-title text-center">
+                            Eventi del Giorno
+                        </div>
+
+                        <div class="marc-events-list marc-events-scroll">
+                            @if (!Model.EventiDelGiorno.Any())
+                            {
+                                <div class="marc-empty-state">
+                                    Nessuna richiesta prevista per oggi.
+                                </div>
+                            }
+                            else
+                            {
+                                @foreach (var evento in Model.EventiDelGiorno)
+                                {
+                                    <div class="marc-event-item">
+                                        <div class="marc-event-main">
+                                            <strong>@evento.Tipo</strong>
+                                            <span class="marc-status-badge @evento.StatoCssClass">
+                                                @evento.Stato
+                                            </span>
+                                        </div>
+
+                                        <div class="marc-history-detail">
+                                            @evento.Dettaglio
+                                        </div>
+
+                                        <div class="marc-history-detail">
+                                            Periodo: @evento.Periodo
+                                        </div>
+
+                                        <div class="marc-history-detail">
+                                            Orario: @evento.Orario
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </article>
+
+                    <article class="marc-panel">
+                        <div class="marc-panel-title text-center">
+                            Totalizzatori al mese di @Model.MeseTotalizzatori @Model.AnnoTotalizzatori
+                        </div>
+
+                        <div class="marc-totalizers">
+                            <div class="marc-totalizer-row">
+                                <span>Saldo Permesso Studio</span>
+                                <span>Ore/Min</span>
+                                <strong>@Model.SaldoPermessoStudioOre.ToString("0.##")</strong>
+                            </div>
+
+                            <div class="marc-totalizer-row @(Model.SaldoFerieRolNegativo ? "marc-totalizer-danger" : "")">
+                                <span>Saldo Ferie / ROL</span>
+                                <span>Giorni</span>
+                                <strong>@Model.SaldoFerieRolGiorni.ToString("0.##")</strong>
+                            </div>
+
+                            <div class="marc-totalizer-row @(Model.SaldoFerieRolNegativo ? "marc-totalizer-danger" : "")">
+                                <span>Saldo Ferie / ROL</span>
+                                <span>Ore/Min</span>
+                                <strong>@Model.SaldoFerieRolOre.ToString("0.##")</strong>
+                            </div>
+
+                            <div class="marc-totalizer-row">
+                                <span>Saldo Recupero Ore</span>
+                                <span>Ore/Min</span>
+                                <strong>@Model.SaldoRecuperoOre.ToString("0.##")</strong>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="marc-panel">
+                        <div class="marc-panel-title text-center">
+                            Le tue richieste di @Model.MeseCorrente
+                        </div>
+
+                        <div class="marc-history-list marc-history-scroll">
+                            @if (!Model.UltimeRichieste.Any())
+                            {
+                                <div class="marc-empty-state">
+                                    Non hai ancora inserito richieste.
+                                </div>
+                            }
+                            else
+                            {
+                                @foreach (var richiesta in Model.UltimeRichieste)
+                                {
+                                    <div class="marc-history-item">
+                                        <div>
+                                            <strong>@richiesta.Tipo</strong>
+                                            <div class="marc-history-detail">
+                                                @richiesta.Dettaglio - Periodo: @richiesta.Data
+                                            </div>
+                                            <div class="marc-history-detail">
+                                                Orario: @richiesta.Orario
+                                            </div>
+                                        </div>
+
+                                        <span class="marc-status-badge @richiesta.StatoCssClass">
+                                            @richiesta.Stato
+                                        </span>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </article>
+
+                    <div class="marc-action-row">
+                        <a class="btn marc-btn-secondary"
+                           href="@Url.Action("Richiesta", "Dipendente", new { tipo = "Giustificativo" })">
+                            Giustificativo
+                        </a>
+
+                        <a class="btn marc-btn-secondary"
+                           href="@Url.Action("Richiesta", "Dipendente", new { tipo = "MancataTimbratura" })">
+                            Mancate Timbrature
+                        </a>
+                        <a class="btn marc-btn-secondary"
+                           href="@Url.Action("Index", "Reparto", new { mese = Model.MeseSelezionato, anno = Model.AnnoSelezionato })">
+                            Calendario Colleghi
+                        </a>
+                    </div>
+
+                </section>
+            </section>
+        </main>
+
+        
+
+    </div>
+</body>
+</html>

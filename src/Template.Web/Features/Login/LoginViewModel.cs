@@ -4,19 +4,16 @@ namespace Template.Web.Features.Login
 {
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Inserisci l'email")]
+        [EmailAddress(ErrorMessage = "Inserisci un indirizzo email valido")]
         [Display(Name = "Email")]
-        [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Inserisci la password")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
-        [Display(Name = "Rimani connesso")]
-        public bool RememberMe { get; set; }
-
-        public string ReturnUrl { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
     }
 }

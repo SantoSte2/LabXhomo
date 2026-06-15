@@ -87,7 +87,7 @@ namespace Template.Web.Infrastructure
 
         /// <summary>
         /// Gets the list of configured <see cref="IFileProvider" /> instances.
-        /// </summary>
+        ///// </summary>
         public IEnumerable<IFileProvider> FileProviders => _fileProviders;
     }
 

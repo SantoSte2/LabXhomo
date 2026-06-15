@@ -1,0 +1,1757 @@
+﻿:root {
+    --marc-bg: #f7f7f7;
+    --marc-header: #dddddd;
+    --marc-card: #e0e0e0;
+    --marc-primary: #2f22e8;
+    --marc-primary-hover: #2418c9;
+    --marc-danger: #db2b25;
+    --marc-text: #1f1f1f;
+    --marc-muted: #666666;
+    --marc-border: #d6d6d6;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    color: var(--marc-text);
+    background: var(--marc-bg);
+}
+
+/* LOGIN */
+
+.marc-login-body {
+    min-height: 100vh;
+}
+
+.marc-login-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+}
+
+.marc-login-header {
+    min-height: 150px;
+    padding: 1.5rem 2rem;
+    background: var(--marc-header);
+    display: grid;
+    grid-template-columns: 180px 1fr 180px;
+    align-items: center;
+}
+
+    .marc-login-header h1 {
+        margin: 0;
+        text-align: center;
+        font-size: clamp(1.5rem, 3vw, 2.3rem);
+        font-weight: 500;
+        letter-spacing: 0.05em;
+    }
+
+.marc-brand {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.marc-brand-name {
+    font-weight: 500;
+    letter-spacing: 0.08em;
+}
+
+.marc-brand-anchor {
+    font-size: 2rem;
+    line-height: 1;
+    margin-top: .25rem;
+}
+
+.marc-login-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem;
+}
+
+.marc-login-card {
+    width: 100%;
+    max-width: 360px;
+    padding: 2rem;
+    background: var(--marc-card);
+    border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .08);
+}
+
+    .marc-login-card h2 {
+        text-align: center;
+        margin-bottom: 1.75rem;
+        font-size: 1.7rem;
+        font-weight: 500;
+    }
+
+    .marc-login-card .form-control {
+        border: none;
+        border-radius: 8px;
+        min-height: 42px;
+    }
+
+.marc-forgot-password {
+    text-align: center;
+    margin: .5rem 0 2rem;
+}
+
+    .marc-forgot-password a {
+        color: var(--marc-primary);
+        text-decoration: none;
+        font-size: .9rem;
+    }
+
+        .marc-forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+.marc-btn-primary {
+    background: var(--marc-primary);
+    border: none;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: .75rem 1.5rem;
+    font-weight: 500;
+}
+
+    .marc-btn-primary:hover {
+        background: var(--marc-primary-hover);
+        color: #ffffff;
+    }
+
+.marc-footer {
+    padding: 1.25rem 1rem;
+    background: var(--marc-header);
+    text-align: center;
+    font-size: .95rem;
+    line-height: 1.35;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+    .marc-login-header {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        text-align: center;
+        padding: 1.25rem;
+    }
+
+    .marc-login-card {
+        max-width: 420px;
+    }
+
+    .marc-footer {
+        font-size: .8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .marc-login-content {
+        align-items: flex-start;
+        padding-top: 2rem;
+    }
+
+    .marc-login-card {
+        padding: 1.5rem;
+    }
+
+        .marc-login-card h2 {
+            font-size: 1.4rem;
+        }
+}
+/* APP LAYOUT */
+
+.marc-app-body {
+    min-height: 100vh;
+    background: #ffffff;
+}
+
+.marc-app-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+}
+
+.marc-app-header {
+    background: var(--marc-header);
+    padding: 1.5rem 2rem;
+    display: grid;
+    grid-template-columns: 150px 1fr auto;
+    gap: 2rem;
+    align-items: center;
+}
+
+.marc-brand-header {
+    text-align: center;
+}
+
+.marc-user-welcome h1 {
+    margin: 0;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 500;
+}
+
+.marc-user-welcome p {
+    margin: .25rem 0 0;
+    font-size: clamp(1.4rem, 2.5vw, 2.3rem);
+}
+
+.marc-user-box {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+}
+
+.marc-employee-code-label {
+    font-size: 1.2rem;
+    margin-bottom: .25rem;
+}
+
+.marc-employee-code {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--marc-muted);
+    margin-bottom: .75rem;
+}
+
+.marc-avatar {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: #cfd5df;
+    color: #1f1f1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    box-shadow: inset 0 0 0 3px rgba(255,255,255,.5);
+}
+
+.marc-btn-danger {
+    background: var(--marc-danger);
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    padding: .55rem 2rem;
+    min-width: 150px;
+}
+
+    .marc-btn-danger:hover {
+        background: #b9221e;
+        color: #ffffff;
+    }
+
+.marc-btn-secondary {
+    background: var(--marc-card);
+    color: var(--marc-text);
+    border: none;
+    border-radius: 8px;
+    padding: .85rem 1.5rem;
+    min-width: 180px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.08);
+}
+
+    .marc-btn-secondary:hover {
+        background: #cfcfcf;
+        color: var(--marc-text);
+    }
+
+.marc-app-main {
+    flex: 1;
+    padding: 3rem 4rem;
+}
+
+.marc-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(320px, 1.05fr) minmax(320px, .95fr);
+    gap: 4rem;
+    align-items: start;
+}
+
+.marc-side-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.marc-panel {
+    background: #ffffff;
+    border: 1px solid #645cff;
+    box-shadow: 0 8px 18px rgba(0,0,0,.05);
+}
+
+.marc-panel-title {
+    padding: .5rem 1rem;
+    border-bottom: 1px solid #645cff;
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.marc-month-panel {
+    min-height: 420px;
+}
+
+.marc-calendar-placeholder {
+    min-height: 360px;
+    background: #d9d9d9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.marc-calendar-empty {
+    color: var(--marc-muted);
+    font-size: 1.1rem;
+}
+
+.marc-events-list {
+    padding: 1rem;
+    min-height: 150px;
+}
+
+.marc-event-item {
+    padding: .65rem .75rem;
+    border-radius: 8px;
+    background: #f4f4f4;
+    margin-bottom: .5rem;
+    font-size: .95rem;
+}
+
+    .marc-event-item:last-child {
+        margin-bottom: 0;
+    }
+
+.marc-totalizers {
+    padding: .85rem 1rem;
+}
+
+.marc-totalizer-row {
+    display: grid;
+    grid-template-columns: 1.5fr .7fr .3fr;
+    gap: .75rem;
+    align-items: center;
+    padding: .35rem 0;
+    font-size: 1rem;
+}
+
+    .marc-totalizer-row strong {
+        text-align: right;
+    }
+
+.marc-action-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding-top: 1rem;
+}
+
+/* RESPONSIVE APP */
+
+@media (max-width: 992px) {
+    .marc-app-header {
+        grid-template-columns: 120px 1fr;
+    }
+
+    .marc-user-box {
+        grid-column: 1 / -1;
+        justify-content: space-between;
+        border-top: 1px solid rgba(0,0,0,.08);
+        padding-top: 1rem;
+    }
+
+    .marc-app-main {
+        padding: 2rem;
+    }
+
+    .marc-dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .marc-month-panel {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .marc-app-header {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 1rem;
+        padding: 1.25rem;
+    }
+
+    .marc-user-box {
+        flex-direction: column-reverse;
+        justify-content: center;
+    }
+
+    .marc-avatar {
+        width: 72px;
+        height: 72px;
+        font-size: 1.4rem;
+    }
+
+    .marc-app-main {
+        padding: 1.25rem;
+    }
+
+    .marc-panel-title {
+        font-size: 1.25rem;
+        text-align: center;
+    }
+
+    .marc-calendar-placeholder {
+        min-height: 240px;
+    }
+
+    .marc-totalizer-row {
+        grid-template-columns: 1fr;
+        gap: .15rem;
+        padding: .75rem 0;
+        border-bottom: 1px solid var(--marc-border);
+    }
+
+        .marc-totalizer-row strong {
+            text-align: left;
+        }
+
+    .marc-action-row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .marc-btn-secondary {
+        width: 100%;
+    }
+}
+/* REQUEST PAGE */
+
+.marc-request-card {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 2rem;
+    box-shadow: 0 14px 35px rgba(0,0,0,.08);
+}
+
+.marc-request-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.marc-request-tab {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 210px;
+    padding: .9rem 1.25rem;
+    border-radius: 10px;
+    background: var(--marc-card);
+    color: var(--marc-text);
+    text-decoration: none;
+    box-shadow: 0 8px 18px rgba(0,0,0,.08);
+}
+
+    .marc-request-tab:hover {
+        background: #cfcfcf;
+        color: var(--marc-text);
+    }
+
+    .marc-request-tab.active {
+        background: var(--marc-primary);
+        color: #ffffff;
+    }
+
+.marc-request-form {
+    width: 100%;
+}
+
+.marc-form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem 2rem;
+}
+
+.marc-wide {
+    grid-column: 1 / -1;
+}
+
+.marc-form-group .form-control,
+.marc-form-group .form-select {
+    border-radius: 8px;
+    min-height: 42px;
+    border: 1px solid var(--marc-border);
+}
+
+.marc-form-group textarea {
+    resize: vertical;
+}
+
+.marc-check-group .form-check {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.marc-request-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+/* CONFIRM PAGE */
+
+.marc-confirm-main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem;
+    background: linear-gradient(rgba(255,255,255,.72), rgba(255,255,255,.72));
+}
+
+.marc-confirm-box {
+    width: 100%;
+    max-width: 560px;
+    background: #ffffff;
+    border: 2px solid var(--marc-primary);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 10px 12px 0 rgba(0,0,0,.18);
+}
+
+    .marc-confirm-box h2 {
+        text-align: center;
+        margin-bottom: 1.75rem;
+    }
+
+.marc-confirm-row {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: 1rem;
+    padding: .65rem 0;
+    border-bottom: 1px solid var(--marc-border);
+}
+
+    .marc-confirm-row span {
+        color: var(--marc-muted);
+    }
+
+.marc-status-pending {
+    color: var(--marc-primary);
+}
+
+.marc-confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* RESPONSIVE REQUEST */
+
+@media (max-width: 992px) {
+    .marc-form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .marc-request-tabs {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .marc-request-card {
+        padding: 1.25rem;
+    }
+
+    .marc-request-tabs {
+        flex-direction: column;
+        margin-bottom: 2rem;
+    }
+
+    .marc-request-tab {
+        width: 100%;
+    }
+
+    .marc-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .marc-request-actions,
+    .marc-confirm-actions {
+        flex-direction: column;
+    }
+
+        .marc-request-actions .btn,
+        .marc-confirm-actions .btn {
+            width: 100%;
+        }
+
+    .marc-confirm-row {
+        grid-template-columns: 1fr;
+        gap: .15rem;
+    }
+
+    .marc-confirm-box {
+        box-shadow: 6px 8px 0 rgba(0,0,0,.18);
+    }
+}
+/* HISTORY */
+
+.marc-history-list {
+    padding: 1rem;
+}
+
+.marc-history-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+    padding: .8rem;
+    border-radius: 10px;
+    background: #f4f4f4;
+    margin-bottom: .7rem;
+}
+
+    .marc-history-item:last-child {
+        margin-bottom: 0;
+    }
+
+.marc-history-detail {
+    color: var(--marc-muted);
+    font-size: .9rem;
+    margin-top: .15rem;
+}
+
+.marc-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 95px;
+    padding: .4rem .8rem;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.marc-status-pending {
+    background: #fff1d6;
+    color: #9a5a00;
+}
+
+.marc-status-approved {
+    background: #dff3e6;
+    color: #176b36;
+}
+
+.marc-status-rejected {
+    background: #f8d7da;
+    color: #9b2c2c;
+}
+
+.marc-empty-state {
+    padding: 1rem;
+    text-align: center;
+    color: var(--marc-muted);
+    background: #f4f4f4;
+    border-radius: 10px;
+}
+
+@media (max-width: 576px) {
+    .marc-history-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .marc-status-badge {
+        min-width: auto;
+    }
+}
+/* SUPER DASHBOARD */
+
+.marc-super-grid {
+    display: grid;
+    grid-template-columns: 360px minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+}
+
+.marc-super-search-panel {
+    background: #ffffff;
+    border: 1px solid #645cff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 28px rgba(0,0,0,.06);
+}
+
+    .marc-super-search-panel h2 {
+        margin-bottom: 1.5rem;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+.marc-super-search-form .form-control {
+    min-height: 44px;
+    border-radius: 8px;
+    border: 1px solid var(--marc-border);
+}
+
+.marc-employee-list {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.marc-employee-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: .85rem 1rem;
+    border-radius: 10px;
+    background: #f4f4f4;
+    color: var(--marc-text);
+    text-decoration: none;
+    transition: .15s ease;
+}
+
+    .marc-employee-result:hover {
+        background: #e8e8e8;
+        color: var(--marc-text);
+    }
+
+    .marc-employee-result.active {
+        background: #ebe9ff;
+        color: var(--marc-primary);
+        box-shadow: inset 0 0 0 2px var(--marc-primary);
+    }
+
+    .marc-employee-result span {
+        color: var(--marc-muted);
+        font-size: .9rem;
+    }
+
+.marc-super-detail-panel {
+    min-width: 0;
+}
+
+.marc-super-empty-panel {
+    min-height: 240px;
+}
+
+.marc-super-matricola {
+    display: block;
+    color: var(--marc-muted);
+    font-size: 1rem;
+    margin-top: .25rem;
+}
+
+.marc-super-requests {
+    padding: 1rem;
+}
+
+.marc-super-request-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 180px;
+    gap: 1.5rem;
+    align-items: center;
+    background: #f4f4f4;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+    .marc-super-request-card:last-child {
+        margin-bottom: 0;
+    }
+
+.marc-super-request-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: .5rem;
+}
+
+.marc-super-request-info {
+    color: var(--marc-muted);
+    font-size: .95rem;
+    margin-bottom: .2rem;
+}
+
+.marc-super-request-actions {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    align-items: stretch;
+}
+
+.marc-btn-approve {
+    width: 100%;
+    background: #218838;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: .55rem 1rem;
+}
+
+    .marc-btn-approve:hover {
+        background: #1b722f;
+        color: #ffffff;
+    }
+
+.marc-btn-reject {
+    width: 100%;
+    background: var(--marc-danger);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: .55rem 1rem;
+}
+
+    .marc-btn-reject:hover {
+        background: #b9221e;
+        color: #ffffff;
+    }
+
+/* RESPONSIVE SUPER */
+
+@media (max-width: 992px) {
+    .marc-super-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .marc-super-search-panel {
+        order: 1;
+    }
+
+    .marc-super-detail-panel {
+        order: 2;
+    }
+}
+
+@media (max-width: 576px) {
+    .marc-super-search-panel {
+        padding: 1.25rem;
+    }
+
+    .marc-employee-result {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .marc-super-request-card {
+        grid-template-columns: 1fr;
+    }
+
+    .marc-super-request-actions {
+        align-items: stretch;
+    }
+}
+/* CALENDAR */
+
+.marc-calendar-widget {
+    background: #ffffff;
+}
+
+.marc-calendar-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .9rem 1rem;
+    background: #f4f4f4;
+    border-bottom: 1px solid var(--marc-border);
+}
+
+.marc-calendar-current {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.marc-calendar-arrow {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--marc-primary);
+    color: #ffffff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+    .marc-calendar-arrow:hover {
+        background: var(--marc-primary-hover);
+        color: #ffffff;
+    }
+
+.marc-calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: #fafafa;
+    border-bottom: 1px solid var(--marc-border);
+}
+
+    .marc-calendar-weekdays span {
+        text-align: center;
+        padding: .55rem .25rem;
+        font-size: .8rem;
+        font-weight: 700;
+        color: var(--marc-muted);
+    }
+
+.marc-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.marc-calendar-day {
+    min-height: 82px;
+    padding: .4rem;
+    border-right: 1px solid var(--marc-border);
+    border-bottom: 1px solid var(--marc-border);
+    background: #ffffff;
+    position: relative;
+}
+
+    .marc-calendar-day:nth-child(7n) {
+        border-right: none;
+    }
+
+    .marc-calendar-day.muted {
+        background: #f7f7f7;
+        color: #b0b0b0;
+    }
+
+    .marc-calendar-day.today {
+        background: #ebe9ff;
+        box-shadow: inset 0 0 0 2px var(--marc-primary);
+    }
+
+    .marc-calendar-day.has-events {
+        background: #fffaf0;
+    }
+
+    .marc-calendar-day.today.has-events {
+        background: #ebe9ff;
+    }
+
+.marc-calendar-day-number {
+    font-weight: 700;
+    font-size: .95rem;
+    margin-bottom: .25rem;
+}
+
+.marc-calendar-events {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+}
+
+.marc-calendar-event {
+    border-radius: 6px;
+    padding: .15rem .3rem;
+    font-size: .68rem;
+    line-height: 1.15;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+}
+
+.marc-calendar-event.marc-status-pending {
+    background: #fff1d6;
+    color: #9a5a00;
+}
+
+.marc-calendar-event.marc-status-approved {
+    background: #dff3e6;
+    color: #176b36;
+}
+
+.marc-calendar-event.marc-status-rejected {
+    background: #f8d7da;
+    color: #9b2c2c;
+}
+
+.marc-calendar-more {
+    font-size: .68rem;
+    color: var(--marc-muted);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .marc-calendar-day {
+        min-height: 68px;
+        padding: .3rem;
+    }
+
+    .marc-calendar-event {
+        font-size: .62rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .marc-calendar-weekdays span {
+        font-size: .65rem;
+    }
+
+    .marc-calendar-day {
+        min-height: 54px;
+    }
+
+    .marc-calendar-event {
+        display: none;
+    }
+
+    .marc-calendar-day.has-events::after {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #f0a000;
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* EVENTS OF THE DAY */
+
+.marc-events-scroll {
+    max-height: 260px;
+    overflow-y: auto;
+    padding-right: .35rem;
+}
+
+.marc-event-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: .35rem;
+}
+
+    .marc-event-main .marc-status-badge {
+        min-width: auto;
+        font-size: .7rem;
+        padding: .25rem .55rem;
+    }
+
+/* CALENDAR DOTS */
+
+.marc-calendar-dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .18rem;
+    margin-top: .25rem;
+}
+
+.marc-calendar-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+    .marc-calendar-dot.marc-status-pending {
+        background: #f0a000;
+    }
+
+    .marc-calendar-dot.marc-status-approved {
+        background: #218838;
+    }
+
+    .marc-calendar-dot.marc-status-rejected {
+        background: #d36b6b;
+    }
+
+@media (max-width: 576px) {
+    .marc-events-scroll {
+        max-height: 220px;
+    }
+
+    .marc-calendar-dots {
+        justify-content: center;
+    }
+
+    .marc-calendar-dot {
+        width: 7px;
+        height: 7px;
+    }
+}
+/* SCROLL HISTORY */
+
+.marc-history-scroll {
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: .35rem;
+}
+
+/* TOTALIZER WARNING */
+
+.marc-totalizer-row.marc-totalizer-danger {
+    background: #f8d7da;
+    color: #9b2c2c;
+    border-radius: 8px;
+    padding-left: .6rem;
+    padding-right: .6rem;
+}
+
+    .marc-totalizer-row.marc-totalizer-danger span,
+    .marc-totalizer-row.marc-totalizer-danger strong {
+        color: #9b2c2c;
+    }
+
+@media (max-width: 576px) {
+    .marc-history-scroll {
+        max-height: 240px;
+    }
+}
+/* COMPACT HEADER */
+
+.marc-app-header-compact {
+    min-height: 92px;
+    padding: .85rem 2rem;
+    grid-template-columns: 95px 1fr auto;
+    align-items: center;
+}
+
+    .marc-app-header-compact .marc-brand-header {
+        justify-self: start;
+    }
+
+    .marc-app-header-compact .marc-page-title {
+        grid-column: 2;
+        justify-self: center;
+        text-align: center;
+    }
+
+    .marc-app-header-compact .marc-user-box-compact {
+        justify-self: end;
+    }
+
+    .marc-app-header-compact .marc-brand-anchor {
+        font-size: 2.4rem;
+    }
+
+.marc-page-title {
+    text-align: center;
+}
+
+    .marc-page-title h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 3vw, 2.4rem);
+        font-weight: 600;
+        letter-spacing: .04em;
+    }
+
+    .marc-page-title p {
+        margin: .15rem 0 0;
+        font-size: clamp(1rem, 2vw, 1.35rem);
+        color: var(--marc-muted);
+    }
+
+.marc-user-box-compact {
+    gap: 1rem;
+}
+
+.marc-user-meta {
+    text-align: center;
+}
+
+.marc-app-header-compact .marc-employee-code-label {
+    font-size: .95rem;
+}
+
+.marc-app-header-compact .marc-employee-code {
+    margin-bottom: .4rem;
+}
+
+.marc-app-header-compact .marc-btn-danger {
+    padding: .42rem 1.4rem;
+    min-width: 120px;
+}
+
+.marc-app-header-compact .marc-avatar {
+    width: 64px;
+    height: 64px;
+    font-size: 1.35rem;
+}
+
+/* Avatar con tooltip semplice, stile Teams */
+.marc-avatar-tooltip {
+    position: relative;
+    cursor: default;
+}
+
+    .marc-avatar-tooltip::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        background: #1f1f1f;
+        color: #ffffff;
+        padding: .35rem .6rem;
+        border-radius: 6px;
+        font-size: .8rem;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-4px);
+        transition: opacity .15s ease, transform .15s ease;
+        z-index: 20;
+    }
+
+    .marc-avatar-tooltip:hover::after {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+@media (max-width: 768px) {
+    .marc-app-header-compact {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 1rem;
+    }
+
+        .marc-app-header-compact .marc-brand-header,
+        .marc-app-header-compact .marc-page-title,
+        .marc-app-header-compact .marc-user-box-compact {
+            grid-column: 1;
+            justify-self: center;
+        }
+
+    .marc-user-box-compact {
+        justify-content: center;
+    }
+}
+
+    .marc-avatar-tooltip::after {
+        right: 50%;
+        transform: translateX(50%) translateY(-4px);
+    }
+
+    .marc-avatar-tooltip:hover::after {
+        transform: translateX(50%) translateY(0);
+    }
+}
+/* PRIVACY PAGE */
+
+.marc-footer-link {
+    color: var(--marc-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+    .marc-footer-link:hover {
+        text-decoration: underline;
+    }
+
+.marc-privacy-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 3rem 1rem;
+}
+
+.marc-privacy-card {
+    width: 100%;
+    max-width: 820px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 2rem;
+    box-shadow: 0 12px 30px rgba(0,0,0,.08);
+    border: 1px solid var(--marc-border);
+}
+
+    .marc-privacy-card h2 {
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .marc-privacy-card p {
+        line-height: 1.65;
+        color: var(--marc-text);
+    }
+/* COLLEAGUES CALENDAR */
+
+.marc-colleagues-page {
+    max-width: 100%;
+}
+
+.marc-colleagues-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+    .marc-colleagues-heading h2 {
+        margin: 0;
+        font-size: 1.8rem;
+    }
+
+    .marc-colleagues-heading p {
+        margin: .25rem 0 0;
+        color: var(--marc-muted);
+    }
+
+.marc-colleagues-nav {
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--marc-border);
+}
+
+.marc-colleagues-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #645cff;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(0,0,0,.06);
+}
+
+.marc-colleagues-table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+}
+
+    .marc-colleagues-table th,
+    .marc-colleagues-table td {
+        border-bottom: 1px solid var(--marc-border);
+        border-right: 1px solid var(--marc-border);
+    }
+
+    .marc-colleagues-table th {
+        min-width: 46px;
+        height: 56px;
+        text-align: center;
+        background: #f4f4f4;
+        font-size: .82rem;
+        vertical-align: middle;
+    }
+
+        .marc-colleagues-table th span {
+            display: block;
+            font-weight: 800;
+        }
+
+        .marc-colleagues-table th small {
+            display: block;
+            color: var(--marc-muted);
+            font-size: .68rem;
+        }
+
+        .marc-colleagues-table th.today,
+        .marc-colleagues-table td.today {
+            background: #ebe9ff;
+        }
+
+        /* Weekend: evidenziati come giorni non lavorativi */
+        .marc-colleagues-table th.weekend,
+        .marc-colleagues-table td.weekend {
+            background: repeating-linear-gradient( 45deg, #f2f2f2, #f2f2f2 6px, #e5e5e5 6px, #e5e5e5 12px );
+            color: #8a8a8a;
+        }
+
+        .marc-colleagues-table th.weekend {
+            border-bottom: 2px dashed #b8b8b8;
+        }
+
+.marc-colleague-day-cell.weekend {
+    border-left: 1px dashed #b8b8b8;
+    border-right: 1px dashed #b8b8b8;
+}
+
+.marc-colleague-name-column {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    min-width: 230px;
+    max-width: 260px;
+    background: #ffffff;
+    text-align: left;
+    padding: .75rem;
+}
+
+thead .marc-colleague-name-column {
+    background: #f4f4f4;
+    z-index: 6;
+}
+
+.marc-colleague-name-column strong {
+    display: block;
+    font-size: .95rem;
+}
+
+.marc-colleague-name-column span {
+    display: block;
+    margin-top: .15rem;
+    color: var(--marc-muted);
+    font-size: .8rem;
+}
+
+.marc-colleague-day-cell {
+    min-width: 46px;
+    height: 48px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.marc-colleague-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .18rem;
+    flex-wrap: wrap;
+    padding: .15rem;
+}
+
+.marc-colleagues-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    color: var(--marc-muted);
+    font-size: .9rem;
+}
+
+    .marc-colleagues-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+    }
+
+.marc-super-top-actions {
+    max-width: 1100px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+    .marc-colleagues-heading {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .marc-colleagues-actions,
+    .marc-colleagues-actions .btn {
+        width: 100%;
+    }
+
+    .marc-colleague-name-column {
+        min-width: 190px;
+    }
+
+    .marc-colleagues-table th,
+    .marc-colleague-day-cell {
+        min-width: 40px;
+    }
+
+    .marc-super-top-actions {
+        justify-content: center;
+    }
+
+        .marc-super-top-actions .btn {
+            width: 100%;
+        }
+}
+/* Griglia più marcata per leggere meglio giorno/persona */
+.marc-colleagues-table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+    .marc-colleagues-table th,
+    .marc-colleagues-table td {
+        border-right: 1px solid #cfcdf8;
+        border-bottom: 1px solid #cfcdf8;
+    }
+
+    .marc-colleagues-table thead th {
+        border-bottom: 2px solid #645cff;
+    }
+
+.marc-colleague-name-column {
+    border-right: 2px solid #645cff !important;
+}
+
+.marc-colleagues-table tbody tr:hover td {
+    background-color: #f4f3ff;
+}
+
+.marc-colleagues-table tbody tr:hover .marc-colleague-name-column {
+    background-color: #f4f3ff;
+}
+/* Pulsanti cambio pagina: home / calendario corrente */
+.marc-page-switch-actions {
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+    .marc-page-switch-actions .btn {
+        min-width: 170px;
+    }
+
+@media (max-width: 768px) {
+    .marc-page-switch-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+        .marc-page-switch-actions .btn {
+            width: 100%;
+        }
+}
+.marc-colleagues-table th.today,
+.marc-colleagues-table td.today {
+    box-shadow: inset 0 0 0 2px var(--marc-primary);
+    position: relative;
+}
+/* =========================================================
+   OVERRIDE FINALE - CALENDARIO COLLEGHI
+   Migliora griglia, weekend e spaziatura pulsanti.
+   ========================================================= */
+
+/* Spazio tra pulsanti superiori e barra del mese */
+.marc-colleagues-heading {
+    margin-bottom: 2.25rem !important;
+}
+
+.marc-page-switch-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    margin-top: .75rem;
+    margin-bottom: 1rem;
+}
+
+    .marc-page-switch-actions .btn {
+        min-width: 180px;
+    }
+
+/* Barra mese più staccata e leggibile */
+.marc-colleagues-nav {
+    margin-top: .5rem !important;
+    margin-bottom: 2rem !important;
+}
+
+/* Griglia più evidente */
+.marc-colleagues-table-wrapper {
+    border: 2px solid #645cff !important;
+    border-radius: 12px;
+}
+
+.marc-colleagues-table {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
+
+    .marc-colleagues-table th,
+    .marc-colleagues-table td {
+        border-right: 1px solid #aaa6ff !important;
+        border-bottom: 1px solid #aaa6ff !important;
+    }
+
+    .marc-colleagues-table thead th {
+        border-bottom: 2px solid #645cff !important;
+    }
+
+.marc-colleague-name-column {
+    border-right: 3px solid #645cff !important;
+}
+
+/* Riga evidenziata al passaggio mouse */
+.marc-colleagues-table tbody tr:hover td:not(.weekend):not(.today) {
+    background-color: #f4f3ff !important;
+}
+
+.marc-colleagues-table tbody tr:hover .marc-colleague-name-column {
+    background-color: #f4f3ff !important;
+}
+
+/* Weekend: rigati/tratteggiati per far capire che non sono lavorativi */
+.marc-colleagues-table th.weekend,
+.marc-colleagues-table td.weekend {
+    background-color: #eeeeee !important;
+    background-image: repeating-linear-gradient( 135deg, rgba(0, 0, 0, .08) 0, rgba(0, 0, 0, .08) 2px, transparent 2px, transparent 8px ) !important;
+    color: #707070 !important;
+}
+
+.marc-colleagues-table th.weekend {
+    border-bottom: 2px dashed #999999 !important;
+}
+
+.marc-colleague-day-cell.weekend {
+    border-left: 1px dashed #999999 !important;
+    border-right: 1px dashed #999999 !important;
+}
+
+/* Oggi rimane sempre molto visibile */
+.marc-colleagues-table th.today,
+.marc-colleagues-table td.today {
+    box-shadow: inset 0 0 0 2px var(--marc-primary) !important;
+    position: relative;
+}
+
+    /* Se oggi cade nel weekend, mantiene sia evidenza che rigatura */
+    .marc-colleagues-table th.today.weekend,
+    .marc-colleagues-table td.today.weekend {
+        background-color: #ebe9ff !important;
+        background-image: repeating-linear-gradient( 135deg, rgba(47, 34, 232, .16) 0, rgba(47, 34, 232, .16) 2px, transparent 2px, transparent 8px ) !important;
+    }
+
+/* Responsive pulsanti pagina calendario colleghi */
+@media (max-width: 768px) {
+    .marc-page-switch-actions {
+        width: 100%;
+        justify-content: stretch;
+        margin-bottom: 1.5rem;
+    }
+
+        .marc-page-switch-actions .btn {
+            width: 100%;
+        }
+}
+
+/* =========================================================
+   FIX FINALE - CALENDARIO COLLEGHI
+   Classi dedicate per griglia, weekend e giorno corrente.
+   ========================================================= */
+
+/* Più spazio tra i pulsanti e la barra del mese */
+.marc-colleagues-heading {
+    margin-bottom: 2.5rem !important;
+}
+
+.marc-page-switch-actions {
+    margin-top: 1rem !important;
+    margin-bottom: 1.5rem !important;
+    gap: 1rem !important;
+}
+
+.marc-colleagues-nav {
+    margin-top: 0 !important;
+    margin-bottom: 2rem !important;
+}
+
+/* Griglia più visibile */
+.marc-colleagues-table-wrapper {
+    border: 2px solid #645cff !important;
+    border-radius: 12px !important;
+}
+
+.marc-colleagues-table {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    empty-cells: show !important;
+}
+
+    .marc-colleagues-table th,
+    .marc-colleagues-table td {
+        border-right: 1px solid #9f9aff !important;
+        border-bottom: 1px solid #9f9aff !important;
+    }
+
+    .marc-colleagues-table thead th {
+        border-bottom: 2px solid #645cff !important;
+    }
+
+.marc-colleague-name-column {
+    border-right: 3px solid #645cff !important;
+}
+
+.marc-colleague-day-header,
+.marc-colleague-day-cell {
+    min-width: 48px !important;
+    height: 50px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+/* Weekend: rigato per indicare giorno non lavorativo */
+.marc-colleagues-table .marc-is-weekend {
+    background-color: #eeeeee !important;
+    background-image: repeating-linear-gradient( 135deg, rgba(0, 0, 0, .10) 0, rgba(0, 0, 0, .10) 2px, transparent 2px, transparent 8px ) !important;
+    color: #707070 !important;
+}
+
+.marc-colleagues-table th.marc-is-weekend {
+    border-bottom: 2px dashed #999999 !important;
+}
+
+/* Giorno corrente evidenziato */
+.marc-colleagues-table .marc-is-today {
+    outline: 3px solid var(--marc-primary) !important;
+    outline-offset: -3px !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+    /* Se oggi è anche weekend, mantiene sia bordo che rigatura */
+    .marc-colleagues-table .marc-is-today.marc-is-weekend {
+        background-color: #ebe9ff !important;
+        background-image: repeating-linear-gradient( 135deg, rgba(47, 34, 232, .18) 0, rgba(47, 34, 232, .18) 2px, transparent 2px, transparent 8px ) !important;
+    }
+
+/* I quadratini ferie restano sopra righe e sfondi */
+.marc-colleague-dots {
+    position: relative !important;
+    z-index: 3 !important;
+}
+
+/* Hover riga, ma senza cancellare weekend e oggi */
+.marc-colleagues-table tbody tr:hover td:not(.marc-is-weekend):not(.marc-is-today) {
+    background-color: #f4f3ff !important;
+}
+
+.marc-colleagues-table tbody tr:hover .marc-colleague-name-column {
+    background-color: #f4f3ff !important;
+}
+
+/* Scheda calendario della Home Dipendente */
+.marc-calendar-card {
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+    .marc-calendar-card .marc-calendar-widget {
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .marc-calendar-card .marc-calendar-nav {
+        border-radius: 0;
+    }

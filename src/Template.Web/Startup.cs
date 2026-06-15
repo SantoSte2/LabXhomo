@@ -1,4 +1,5 @@
 ﻿//using Template.Web.Hubs;
+using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Template.Data;
 using Template.Services;
 using Template.Web.Infrastructure;
 using Template.Web.SignalR.Hubs;
@@ -38,12 +40,40 @@ namespace Template.Web
             });
 
             // SERVICES FOR AUTHENTICATION
-            services.AddSession();
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            // La sessione conserva i dati usati dalle pagine di MarcTempo.
+            services.AddSession(options =>
             {
-                options.LoginPath = "/Login/Login";
-                options.LogoutPath = "/Login/Logout";
+                /*
+                 * Il nome versione 2 permette di ignorare automaticamente
+                 * eventuali vecchi cookie di sessione.
+                 */
+                options.Cookie.Name = ".MarcTempo.Session.v2";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+                options.IdleTimeout = TimeSpan.FromHours(8);
             });
+
+            // Il cookie contiene i claim necessari a ricostruire la sessione.
+            services
+                .AddAuthentication(
+                    CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    /*
+                     * Questo è il punto in cui si imposta
+                     * il nome ".MarcTempo.Auth.v2".
+                     */
+                    options.Cookie.Name = ".MarcTempo.Auth.v2";
+
+                    options.LoginPath = "/Login/Login";
+                    options.AccessDeniedPath = "/Login/Login";
+
+                    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+                    options.SlidingExpiration = true;
+
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.IsEssential = true;
+                });
 
             var builder = services.AddMvc()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
@@ -79,41 +109,84 @@ namespace Template.Web
             Container.RegisterTypes(services);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env)
         {
-            // Configure the HTTP request pipeline.
+            // Configurazione della pipeline HTTP.
             if (!env.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
 
-                // Https redirection only in production
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
 
-            // Localization support if you want to
-            app.UseRequestLocalization(SupportedCultures.CultureNames);
+            app.UseRequestLocalization(
+                SupportedCultures.CultureNames);
+
+            /*
+             * Il provider personalizzato deve essere configurato
+             * prima di UseStaticFiles.
+             */
+            var nodeModules = new CompositePhysicalFileProvider(
+                Directory.GetCurrentDirectory(),
+                "node_modules");
+
+            var areas = new CompositePhysicalFileProvider(
+                Directory.GetCurrentDirectory(),
+                "Areas");
+
+            var compositeFileProvider =
+                new CustomCompositeFileProvider(
+                    env.WebRootFileProvider,
+                    nodeModules,
+                    areas);
+
+            env.WebRootFileProvider = compositeFileProvider;
+
+            // CSS, JavaScript e immagini vengono serviti prima del routing.
+            app.UseStaticFiles();
 
             app.UseRouting();
 
-            // Adding authentication to pipeline
+            /*
+             * Ordine importante:
+             * 1. sessione;
+             * 2. autenticazione;
+             * 3. autorizzazione.
+             */
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 
-            var node_modules = new CompositePhysicalFileProvider(Directory.GetCurrentDirectory(), "node_modules");
-            var areas = new CompositePhysicalFileProvider(Directory.GetCurrentDirectory(), "Areas");
-            var compositeFp = new CustomCompositeFileProvider(env.WebRootFileProvider, node_modules, areas);
-            env.WebRootFileProvider = compositeFp;
-            app.UseStaticFiles();
+            // Creazione degli utenti iniziali nel database InMemory.
+            using (var scope =
+                   app.ApplicationServices.CreateScope())
+            {
+                var dbContext =
+                    scope.ServiceProvider
+                        .GetRequiredService<TemplateDbContext>();
+
+                SeedData.Initialize(dbContext);
+            }
 
             app.UseEndpoints(endpoints =>
             {
-                // ROUTING PER HUB
-                endpoints.MapHub<TemplateHub>("/templateHub");
+                // Routing SignalR.
+                endpoints.MapHub<TemplateHub>(
+                    "/templateHub");
 
-                endpoints.MapAreaControllerRoute("Example", "Example", "Example/{controller=Users}/{action=Index}/{id?}");
-                endpoints.MapControllerRoute("default", "{controller=Login}/{action=Login}");
+                endpoints.MapAreaControllerRoute(
+                    name: "Example",
+                    areaName: "Example",
+                    pattern:
+                        "Example/{controller=Users}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern:
+                        "{controller=Login}/{action=Login}/{id?}");
             });
         }
     }

@@ -1,0 +1,221 @@
+﻿@model Template.Web.Features.Super.SuperDashboardViewModel
+@using System.Linq
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MarcTempo - Home Super</title>
+
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/marc-tempo.css" asp-append-version="true" />
+</head>
+
+<body class="marc-app-body">
+    <div class="marc-app-page">
+
+        <header class="marc-app-header marc-app-header-compact">
+            <div class="marc-brand marc-brand-header">
+                <div class="marc-brand-anchor">⚓</div>
+            </div>
+
+            <div class="marc-page-title">
+                <h1>MarcTempo</h1>
+                
+            </div>
+
+            <div class="marc-user-box marc-user-box-compact">
+                <div class="marc-user-meta">
+                    <div class="marc-employee-code-label">Codice Super</div>
+                    <div class="marc-employee-code">@Model.MatricolaSuper</div>
+
+                    <form method="post" action="@Url.Action("Logout", "Login")">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn marc-btn-danger">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+
+                <div class="marc-avatar marc-avatar-tooltip" data-tooltip="@Model.NominativoSuper">
+                    @Model.InizialiSuper
+                </div>
+            </div>
+        </header>
+
+        <main class="marc-app-main">
+
+            <div class="marc-super-top-actions">
+                <a class="btn marc-btn-secondary" href="@Url.Action("Index", "Reparto")">
+                    Calendario Colleghi
+                </a>
+            </div>
+
+            <section class="marc-super-grid">
+
+                <aside class="marc-super-search-panel">
+                    <h2>Ricerca dipendente</h2>
+
+                    <form method="get" action="@Url.Action("Index", "Super")" class="marc-super-search-form">
+                        <label class="form-label" for="searchTerm">
+                            Nome, cognome o matricola
+                        </label>
+
+                        <input class="form-control"
+                               id="searchTerm"
+                               name="searchTerm"
+                               value="@Model.SearchTerm"
+                               list="dipendentiList"
+                               placeholder="Es. Stefano, Rossi, DIP001" />
+
+                        <datalist id="dipendentiList">
+                            @foreach (var dipendente in Model.Dipendenti)
+                            {
+                                <option value="@dipendente.Matricola">
+                                    @dipendente.VoceRicerca
+                                </option>
+                                <option value="@dipendente.Nome">
+                                    @dipendente.VoceRicerca
+                                </option>
+                                <option value="@dipendente.Cognome">
+                                    @dipendente.VoceRicerca
+                                </option>
+                            }
+                        </datalist>
+
+                        <button type="submit" class="btn marc-btn-primary w-100 mt-3">
+                            Cerca
+                        </button>
+                    </form>
+
+                    <div class="marc-employee-list">
+                        @if (!Model.Dipendenti.Any())
+                        {
+                            <div class="marc-empty-state">
+                                Nessun dipendente trovato.
+                            </div>
+                        }
+                        else
+                        {
+                            @foreach (var dipendente in Model.Dipendenti)
+                            {
+                                var isSelected = Model.DipendenteSelezionatoId == dipendente.Id;
+
+                                <a class="marc-employee-result @(isSelected ? "active" : "")"
+                                   href="@Url.Action("Index", "Super", new { searchTerm = Model.SearchTerm, dipendenteId = dipendente.Id })">
+                                    <strong>@dipendente.Nominativo</strong>
+                                    <span>@dipendente.Matricola</span>
+                                </a>
+                            }
+                        }
+                    </div>
+                </aside>
+
+                <section class="marc-super-detail-panel">
+                    @if (Model.DipendenteSelezionato == null)
+                    {
+                        <div class="marc-panel marc-super-empty-panel">
+                            <div class="marc-panel-title text-center">
+                                Seleziona un dipendente
+                            </div>
+
+                            <div class="marc-empty-state m-3">
+                                Cerca un dipendente e selezionalo dall’elenco per visualizzare le sue richieste.
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <article class="marc-panel">
+                            <div class="marc-panel-title text-center">
+                                @Model.DipendenteSelezionato.Nominativo
+                                <span class="marc-super-matricola">
+                                    @Model.DipendenteSelezionato.Matricola
+                                </span>
+                            </div>
+
+                            <div class="marc-super-requests">
+                                @if (!Model.Richieste.Any())
+                                {
+                                    <div class="marc-empty-state">
+                                        Il dipendente non ha ancora inserito richieste.
+                                    </div>
+                                }
+                                else
+                                {
+                                    @foreach (var richiesta in Model.Richieste)
+                                    {
+                                        <div class="marc-super-request-card">
+                                            <div class="marc-super-request-main">
+                                                <div class="marc-super-request-title">
+                                                    @richiesta.Tipo
+                                                </div>
+
+                                                <div class="marc-super-request-info">
+                                                    <strong>Dettaglio:</strong> @richiesta.Dettaglio
+                                                </div>
+
+                                                <div class="marc-super-request-info">
+                                                    <strong>Periodo:</strong> @richiesta.Data
+                                                </div>
+
+                                                <div class="marc-super-request-info">
+                                                    <strong>Orario:</strong> @richiesta.Orario
+                                                </div>
+
+                                                <div class="marc-super-request-info">
+                                                    <strong>Motivazione:</strong> @richiesta.Motivazione
+                                                </div>
+                                            </div>
+
+                                            <div class="marc-super-request-actions">
+                                                <span class="marc-status-badge @richiesta.StatoCssClass">
+                                                    @richiesta.Stato
+                                                </span>
+
+                                                @if (richiesta.PuoEssereValidata)
+                                                {
+                                                    <form method="post" action="@Url.Action("Approva", "Super")">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="richiestaId" value="@richiesta.Id" />
+                                                        <input type="hidden" name="dipendenteId" value="@Model.DipendenteSelezionato.Id" />
+                                                        <input type="hidden" name="searchTerm" value="@Model.SearchTerm" />
+
+                                                        <button type="submit" class="btn marc-btn-approve">
+                                                            Approva
+                                                        </button>
+                                                    </form>
+
+                                                    <form method="post" action="@Url.Action("Respingi", "Super")">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="richiestaId" value="@richiesta.Id" />
+                                                        <input type="hidden" name="dipendenteId" value="@Model.DipendenteSelezionato.Id" />
+                                                        <input type="hidden" name="searchTerm" value="@Model.SearchTerm" />
+
+                                                        <button type="submit" class="btn marc-btn-reject">
+                                                            Respingi
+                                                        </button>
+                                                    </form>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </article>
+                    }
+                </section>
+
+            </section>
+        </main>
+
+        
+
+    </div>
+</body>
+</html>

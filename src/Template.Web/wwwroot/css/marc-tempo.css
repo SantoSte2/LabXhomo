@@ -1,0 +1,13 @@
+/*
+ * MarcTempo - foglio indice.
+ * L'ordine degli import è intenzionale: base -> layout -> componenti -> pagine.
+ */
+@import url("./marctempo/variables.css");
+@import url("./marctempo/base.css");
+@import url("./marctempo/layout.css");
+@import url("./marctempo/components.css");
+@import url("./marctempo/login-privacy.css");
+@import url("./marctempo/dipendente.css");
+@import url("./marctempo/richiesta.css");
+@import url("./marctempo/super.css");
+@import url("./marctempo/reparto.css");

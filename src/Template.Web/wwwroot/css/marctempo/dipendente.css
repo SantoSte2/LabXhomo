@@ -1,0 +1,333 @@
+/* Home Dipendente: dashboard, calendario, eventi, totalizzatori e storico. */
+.marc-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(320px, 1.05fr) minmax(320px, .95fr);
+    gap: 4rem;
+    align-items: start;
+}
+
+.marc-side-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.marc-month-panel {
+    min-height: 420px;
+}
+
+/* Card calendario arrotondata: il bordo non viene più tagliato da regole generiche. */
+#calendario.marc-calendar-card {
+    overflow: hidden;
+    border-radius: var(--marc-radius-large);
+}
+
+#calendario.marc-calendar-card .marc-calendar-widget {
+    overflow: hidden;
+    border-radius: inherit;
+    background: var(--marc-surface);
+}
+
+#calendario.marc-calendar-card .marc-calendar-nav {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+}
+
+.marc-calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid var(--marc-border);
+    background: #fafafa;
+}
+
+.marc-calendar-weekdays span {
+    padding: .55rem .25rem;
+    color: var(--marc-muted);
+    text-align: center;
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+.marc-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.marc-calendar-day {
+    position: relative;
+    min-height: 82px;
+    padding: .4rem;
+    border-right: 1px solid var(--marc-border);
+    border-bottom: 1px solid var(--marc-border);
+    background: var(--marc-surface);
+}
+
+.marc-calendar-day:nth-child(7n) { border-right: none; }
+.marc-calendar-day.muted { background: #f7f7f7; color: #b0b0b0; }
+.marc-calendar-day.today { background: #ebe9ff; box-shadow: inset 0 0 0 2px var(--marc-primary); }
+.marc-calendar-day.has-events { background: #fffaf0; }
+.marc-calendar-day.today.has-events { background: #ebe9ff; }
+
+.marc-calendar-day-number {
+    margin-bottom: .25rem;
+    font-size: .95rem;
+    font-weight: 700;
+}
+
+.marc-calendar-events {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+}
+
+.marc-calendar-event {
+    overflow: hidden;
+    padding: .15rem .3rem;
+    border-radius: 6px;
+    font-size: .68rem;
+    font-weight: 600;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+}
+
+.marc-calendar-event.marc-status-pending { background: #fff1d6; color: #9a5a00; }
+.marc-calendar-event.marc-status-approved { background: #dff3e6; color: #176b36; }
+.marc-calendar-event.marc-status-rejected { background: #f8d7da; color: #9b2c2c; }
+
+.marc-calendar-dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .18rem;
+    margin-top: .25rem;
+}
+
+.marc-events-list {
+    min-height: 150px;
+    padding: 1rem;
+}
+
+.marc-events-scroll {
+    max-height: 260px;
+    overflow-y: auto;
+    padding-right: .35rem;
+}
+
+.marc-event-item {
+    margin-bottom: .5rem;
+    padding: .65rem .75rem;
+    border-radius: var(--marc-radius-small);
+    background: #f4f4f4;
+    font-size: .95rem;
+}
+
+.marc-event-item:last-child { margin-bottom: 0; }
+
+.marc-event-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    margin-bottom: .35rem;
+}
+
+.marc-event-main .marc-status-badge {
+    min-width: auto;
+    padding: .25rem .55rem;
+    font-size: .7rem;
+}
+
+.marc-totalizers { padding: .85rem 1rem; }
+
+.marc-totalizer-row {
+    display: grid;
+    grid-template-columns: 1.5fr .7fr .3fr;
+    gap: .75rem;
+    align-items: center;
+    padding: .35rem 0;
+    font-size: 1rem;
+}
+
+.marc-totalizer-row strong { text-align: right; }
+
+.marc-totalizer-row.marc-totalizer-danger {
+    padding-right: .6rem;
+    padding-left: .6rem;
+    border-radius: var(--marc-radius-small);
+    background: #f8d7da;
+    color: #9b2c2c;
+}
+
+.marc-totalizer-row.marc-totalizer-danger span,
+.marc-totalizer-row.marc-totalizer-danger strong { color: #9b2c2c; }
+
+.marc-history-list { padding: 1rem; }
+
+.marc-history-scroll {
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: .35rem;
+}
+
+.marc-history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: .7rem;
+    padding: .8rem;
+    border-radius: 10px;
+    background: #f4f4f4;
+}
+
+.marc-history-item:last-child { margin-bottom: 0; }
+
+.marc-history-detail {
+    margin-top: .15rem;
+    color: var(--marc-muted);
+    font-size: .9rem;
+}
+
+.marc-action-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding-top: 1rem;
+}
+
+@media (max-width: 992px) {
+    .marc-dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .marc-month-panel { min-height: auto; }
+}
+
+@media (max-width: 768px) {
+    .marc-calendar-day { min-height: 68px; padding: .3rem; }
+    .marc-calendar-event { font-size: .62rem; }
+}
+
+@media (max-width: 576px) {
+    .marc-calendar-weekdays span { font-size: .65rem; }
+    .marc-calendar-day { min-height: 54px; }
+    .marc-calendar-event { display: none; }
+
+    .marc-calendar-day.has-events::after {
+        content: "";
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #f0a000;
+        transform: translateX(-50%);
+    }
+
+    .marc-events-scroll { max-height: 220px; }
+    .marc-calendar-dots { justify-content: center; }
+    .marc-calendar-dot { width: 7px; height: 7px; }
+    .marc-history-scroll { max-height: 240px; }
+
+    .marc-history-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .marc-status-badge { min-width: auto; }
+
+    .marc-totalizer-row {
+        grid-template-columns: 1fr;
+        gap: .15rem;
+        padding: .75rem 0;
+        border-bottom: 1px solid var(--marc-border);
+    }
+
+    .marc-totalizer-row strong { text-align: left; }
+
+    .marc-action-row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+/* =========================================================
+   FESTIVITÀ - CALENDARIO PERSONALE
+
+   Le festività civili vengono mostrate in blu.
+   Le festività religiose vengono mostrate in viola.
+   ========================================================= */
+
+/*
+ * Le classi impostano soltanto la variabile del colore.
+ * La regola generica marc-is-holiday utilizza poi
+ * quella variabile per disegnare la fascia inferiore.
+ */
+.marc-holiday-civil {
+    --marc-holiday-color: #2f22e8;
+}
+
+.marc-holiday-religious {
+    --marc-holiday-color: #8a3fb0;
+}
+
+/*
+ * La festività viene evidenziata con una fascia colorata
+ * nella parte inferiore della cella.
+ *
+ * Non sostituiamo completamente lo sfondo,
+ * così resta visibile anche l'evidenziazione di oggi.
+ */
+.marc-calendar-day.marc-is-holiday {
+    box-shadow: inset 0 -5px 0 var(--marc-holiday-color);
+}
+
+/*
+ * Se la festività coincide con il giorno corrente,
+ * manteniamo sia il bordo del giorno corrente
+ * sia la fascia blu o viola.
+ */
+.marc-calendar-day.today.marc-is-holiday {
+    box-shadow: inset 0 0 0 2px var(--marc-primary), inset 0 -5px 0 var(--marc-holiday-color);
+}
+
+/*
+ * Nome della festività mostrato sotto al numero del giorno.
+ *
+ * Limitiamo il testo a due righe:
+ * il nome completo resta comunque disponibile
+ * passando il mouse sulla cella.
+ */
+.marc-calendar-holiday-name {
+    max-height: 2.3em;
+    margin-bottom: .2rem;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    color: var(--marc-holiday-color);
+    font-size: .58rem;
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+/*
+ * Eventi e quadratini restano sopra
+ * la fascia grafica della festività.
+ */
+.marc-calendar-events,
+.marc-calendar-dots {
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 576px) {
+    /*
+     * Su smartphone mostriamo un'etichetta più compatta.
+     */
+    .marc-calendar-holiday-name {
+        max-height: 1.2em;
+        font-size: .48rem;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
