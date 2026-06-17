@@ -52,9 +52,28 @@ namespace Template.Web.Features.Super
 
         public string Stato { get; set; } = string.Empty;
 
-
         public string StatoCssClass { get; set; } = string.Empty;
 
         public bool PuoEssereValidata { get; set; }
+
+        /*
+         * Motivazione inserita dal Super
+         * dopo l'approvazione o il rifiuto.
+         */
+        public string MotivazioneEsito { get; set; }
+            = string.Empty;
+
+        /*
+         * Data della valutazione già formattata
+         * per essere mostrata nella View.
+         */
+        public string DataValutazione { get; set; }
+            = string.Empty;
+
+        /*
+         * Super che ha valutato la richiesta.
+         */
+        public string ValutataDa { get; set; }
+            = string.Empty;
     }
 }

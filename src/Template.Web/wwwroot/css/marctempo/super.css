@@ -185,3 +185,69 @@
     .marc-super-request-actions { align-items: stretch; }
     .marc-month-stats { grid-template-columns: 1fr; }
 }
+
+/* =========================================================
+   VALUTAZIONE RICHIESTE CON MOTIVAZIONE
+   ========================================================= */
+
+.marc-super-decision-form {
+    display: flex;
+    flex-direction: column;
+    gap: .65rem;
+}
+
+    .marc-super-decision-form label {
+        font-size: .9rem;
+        font-weight: 700;
+    }
+
+    .marc-super-decision-form textarea {
+        min-height: 88px;
+        resize: vertical;
+        border-radius: var(--marc-radius-small);
+    }
+
+.marc-super-decision-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .6rem;
+}
+
+.marc-super-evaluation-result {
+    margin-top: .8rem;
+    padding: .8rem;
+    border: 1px solid var(--marc-border);
+    border-radius: 10px;
+    background: #ffffff;
+    font-size: .88rem;
+    line-height: 1.45;
+}
+
+    .marc-super-evaluation-result div + div {
+        margin-top: .25rem;
+    }
+
+.marc-super-message {
+    max-width: 900px;
+    margin: 0 auto 1rem;
+    padding: .85rem 1rem;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.marc-super-message-error {
+    background: #f8d7da;
+    color: #9b2c2c;
+}
+
+.marc-super-message-success {
+    background: #dff3e6;
+    color: #176b36;
+}
+
+@media (max-width: 576px) {
+    .marc-super-decision-buttons {
+        grid-template-columns: 1fr;
+    }
+}

@@ -14,11 +14,60 @@ namespace Template.Web.Features.Reparto
 
         public string RuoloUtente { get; set; } = string.Empty;
 
+        /*
+         * Proprietà calcolate utilizzate dalla View.
+         *
+         * Evitiamo di confrontare direttamente le stringhe del ruolo
+         * in diversi punti del file Razor.
+         */
+        public bool UtenteDipendente =>
+            string.Equals(
+                RuoloUtente,
+                "Dipendente",
+                StringComparison.OrdinalIgnoreCase);
+
+        /*
+         * Identifica l'utente con ruolo Super.
+         */
+        public bool UtenteSuper =>
+            string.Equals(
+                RuoloUtente,
+                "Super",
+                StringComparison.OrdinalIgnoreCase);
+
         public string NomeMese { get; set; } = string.Empty;
 
         public int Mese { get; set; }
 
         public int Anno { get; set; }
+
+        /*
+         * Estremi del periodo visualizzato nella vista mensile.
+         *
+         * Il valore predefinito sarà:
+         * - Dal: primo giorno del mese;
+         * - Al: ultimo giorno del mese.
+         */
+        public DateTime DataDal { get; set; }
+
+        public DateTime DataAl { get; set; }
+
+        /*
+         * Titolo mostrato sopra la griglia.
+         *
+         * Quando viene visualizzato l'intero mese sarà, ad esempio:
+         * "Giugno 2026".
+         *
+         * Per un intervallo personalizzato sarà:
+         * "10/06/2026 - 24/06/2026".
+         */
+        public string TitoloPeriodo { get; set; } = string.Empty;
+
+        /*
+         * Eventuale messaggio mostrato quando l'intervallo
+         * inserito dall'utente deve essere corretto.
+         */
+        public string MessaggioPeriodo { get; set; } = string.Empty;
 
         public int MesePrecedente { get; set; }
 
@@ -60,6 +109,35 @@ namespace Template.Web.Features.Reparto
         public string NomeFestivita { get; set; } = string.Empty;
 
         public string ClasseFestivita { get; set; } = string.Empty;
+
+        /*
+         * Numero complessivo degli utenti con ruolo Dipendente.
+         * Gli utenti Super non vengono inclusi nel conteggio.
+         */
+        public int TotaleDipendenti { get; set; }
+
+        /*
+         * Dipendenti considerati presenti nella giornata.
+         *
+         * Lo Smart Working viene contato come presenza,
+         * mentre ferie e permessi giornalieri approvati
+         * vengono considerati assenza.
+         */
+        public int DipendentiPresenti { get; set; }
+
+        /*
+         * Numero di dipendenti che lavorano in Smart Working.
+         * Sono già compresi nel valore DipendentiPresenti.
+         */
+        public int DipendentiSmartWorking { get; set; }
+
+        /*
+         * Proprietà calcolata utile per la View.
+         */
+        public int DipendentiAssenti =>
+            Math.Max(
+                0,
+                TotaleDipendenti - DipendentiPresenti);
     }
 
     public class RigaPersonaRepartoViewModel
@@ -71,6 +149,16 @@ namespace Template.Web.Features.Reparto
         public string Matricola { get; set; } = string.Empty;
 
         public string Ruolo { get; set; } = string.Empty;
+
+        /*
+         * Indica che questa riga appartiene
+         * all'utente attualmente autenticato.
+         *
+         * La View la utilizza per mostrare l'etichetta "Tu"
+         * e rendere immediatamente riconoscibili
+         * le richieste personali.
+         */
+        public bool UtenteCorrente { get; set; }
 
         public List<CellaFerieRepartoViewModel> Celle { get; set; } = new();
     }
@@ -96,8 +184,26 @@ namespace Template.Web.Features.Reparto
 
     public class EventoFerieRepartoViewModel
     {
+        /*
+         * Tipologia sintetica mostrata nella cella:
+         * - Ferie;
+         * - Ferie straord.;
+         * - successivamente anche Smart o Permesso.
+         */
         public string Testo { get; set; } = string.Empty;
 
+        /*
+         * Stato scritto esplicitamente.
+         *
+         * In questo modo l'utente non deve ricordare
+         * il significato dei colori della legenda.
+         */
+        public string StatoTesto { get; set; } = string.Empty;
+
+        /*
+         * Il colore rimane come rinforzo grafico,
+         * ma non è più l'unico elemento informativo.
+         */
         public string StatoCssClass { get; set; } = string.Empty;
     }
 
@@ -146,5 +252,27 @@ namespace Template.Web.Features.Reparto
         public string Stato { get; set; } = string.Empty;
 
         public string StatoCssClass { get; set; } = string.Empty;
+
+        /*
+         * Stato formattato in modo leggibile
+         * direttamente nella cella annuale.
+         *
+         * Non utilizziamo soltanto il colore:
+         * l'utente può leggere esplicitamente
+         * "In attesa", "Approvata" oppure "Respinta".
+         */
+        public string StatoTesto { get; set; }
+            = string.Empty;
+
+        /*
+         * Tipologia sintetica della richiesta mostrata
+         * nella cella annuale:
+         * - Ferie;
+         * - Smart working;
+         * - Permesso studio;
+         * - Ferie straord.
+         */
+        public string TipoRichiestaTesto { get; set; }
+            = string.Empty;
     }
 }

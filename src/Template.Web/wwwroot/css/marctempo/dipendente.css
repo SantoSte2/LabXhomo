@@ -331,3 +331,54 @@
         text-overflow: ellipsis;
     }
 }
+
+/* =========================================================
+   RISPOSTA DEL SUPER NELLO STORICO DIPENDENTE
+
+   Il dipendente può conoscere la motivazione
+   dell'approvazione oppure del rifiuto.
+   ========================================================= */
+
+.marc-employee-evaluation {
+    margin-top: .7rem;
+    padding: .7rem .85rem;
+    border-left: 4px solid currentColor;
+    border-radius: 8px;
+    background: #ffffff;
+    line-height: 1.4;
+}
+
+.marc-employee-evaluation-title {
+    display: block;
+    margin-bottom: .25rem;
+    font-size: .88rem;
+}
+
+.marc-employee-evaluation-text {
+    margin: 0;
+    font-size: .88rem;
+    overflow-wrap: anywhere;
+}
+
+.marc-employee-evaluation-meta {
+    margin-top: .35rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+    color: var(--marc-muted);
+    font-size: .75rem;
+}
+
+/* Valutazione approvata. */
+.marc-employee-evaluation.marc-status-approved {
+    border-left-color: #2f7d45;
+    background: #eef8f1;
+    color: #176b36;
+}
+
+/* Valutazione respinta. */
+.marc-employee-evaluation.marc-status-rejected {
+    border-left-color: #b83b3b;
+    background: #fff0f1;
+    color: #9b2c2c;
+}

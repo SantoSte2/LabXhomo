@@ -1,0 +1,11 @@
+Super:
+admin@marctempo.it / Admin123
+
+Dipendente:
+stefano.santoni@marctempo.it / User123
+
+Dipendente:
+mario.rossi@marctempo.it / User123
+
+Dipendente:
+mario.rossi2@marctempo.it / User12

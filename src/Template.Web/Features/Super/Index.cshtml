@@ -5,6 +5,7 @@
     Layout = null;
 }
 
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -50,9 +51,34 @@
 
         <main class="marc-app-main">
 
+            @*
+             * Messaggio di errore mostrato, ad esempio,
+             * quando manca la motivazione del Super.
+             *@
+            @if (TempData["ErroreValutazione"] is string errore)
+            {
+                <div class="marc-super-message marc-super-message-error"
+                     role="alert">
+                    @errore
+                </div>
+            }
+
+            @*
+             * Messaggio di conferma dopo l'approvazione
+             * oppure il rifiuto della richiesta.
+             *@
+            @if (TempData["EsitoValutazione"] is string esito)
+            {
+                <div class="marc-super-message marc-super-message-success"
+                     role="status">
+                    @esito
+                </div>
+            }
+
             <div class="marc-super-top-actions">
-                <a class="btn marc-btn-secondary" href="@Url.Action("Index", "Reparto")">
-                    Calendario Colleghi
+                <a class="btn marc-btn-secondary"
+                   href="@Url.Action("Index", "Reparto")">
+                    Torna alla Home
                 </a>
             </div>
 
@@ -180,27 +206,79 @@
 
                                                 @if (richiesta.PuoEssereValidata)
                                                 {
-                                                    <form method="post" action="@Url.Action("Approva", "Super")">
+                                                    @*
+                                                     * Un solo form contiene sia la motivazione
+                                                     * sia i due possibili esiti.
+                                                     *
+                                                     * L'attributo formaction decide quale action
+                                                     * chiamare in base al pulsante premuto.
+                                                     *@
+                                                    <form method="post"
+                                                          class="marc-super-decision-form">
+
                                                         @Html.AntiForgeryToken()
-                                                        <input type="hidden" name="richiestaId" value="@richiesta.Id" />
-                                                        <input type="hidden" name="dipendenteId" value="@Model.DipendenteSelezionato.Id" />
-                                                        <input type="hidden" name="searchTerm" value="@Model.SearchTerm" />
 
-                                                        <button type="submit" class="btn marc-btn-approve">
-                                                            Approva
-                                                        </button>
+                                                        <input type="hidden"
+                                                               name="richiestaId"
+                                                               value="@richiesta.Id" />
+
+                                                        <input type="hidden"
+                                                               name="dipendenteId"
+                                                               value="@Model.DipendenteSelezionatoId" />
+
+                                                        <input type="hidden"
+                                                               name="searchTerm"
+                                                               value="@Model.SearchTerm" />
+
+                                                        <label for="motivazione-esito-@richiesta.Id">
+                                                            Motivazione del Super
+                                                        </label>
+
+                                                        <textarea id="motivazione-esito-@richiesta.Id"
+                                                              name="motivazioneEsito"
+                                                              class="form-control"
+                                                              rows="3"
+                                                              maxlength="500"
+                                                              placeholder="Inserisci la motivazione dell'esito..."
+                                                              required></textarea>
+
+                                                        <div class="marc-super-decision-buttons">
+
+                                                            <button type="submit"
+                                                                    formaction="@Url.Action("Approva", "Super")"
+                                                                    class="btn marc-btn-approve">
+                                                                Approva
+                                                            </button>
+
+                                                            <button type="submit"
+                                                                    formaction="@Url.Action("Respingi", "Super")"
+                                                                    class="btn marc-btn-reject">
+                                                                Respingi
+                                                            </button>
+
+                                                        </div>
                                                     </form>
+                                                }
+                                                else
+                                                {
+                                                    <div class="marc-super-evaluation-result">
 
-                                                    <form method="post" action="@Url.Action("Respingi", "Super")">
-                                                        @Html.AntiForgeryToken()
-                                                        <input type="hidden" name="richiestaId" value="@richiesta.Id" />
-                                                        <input type="hidden" name="dipendenteId" value="@Model.DipendenteSelezionato.Id" />
-                                                        <input type="hidden" name="searchTerm" value="@Model.SearchTerm" />
+                                                        <div>
+                                                            <strong>Motivazione esito:</strong>
+                                                            @richiesta.MotivazioneEsito
+                                                        </div>
 
-                                                        <button type="submit" class="btn marc-btn-reject">
-                                                            Respingi
-                                                        </button>
-                                                    </form>
+                                                        <div>
+                                                            <strong>Valutata da:</strong>
+                                                            @richiesta.ValutataDa
+                                                        </div>
+
+                                                        <div>
+                                                            <strong>Data valutazione:</strong>
+                                                            @richiesta.DataValutazione
+                                                        </div>
+
+                                                    </div>
                                                 }
                                             </div>
                                         </div>

@@ -40,6 +40,29 @@ public class Richiesta
     [MaxLength(500)]
     public string? Motivazione { get; set; }
 
+    /*
+     * Motivazione inserita dal Super durante
+     * l'approvazione oppure il rifiuto.
+     *
+     * È distinta da Motivazione, che contiene invece
+     * le eventuali note scritte dal dipendente.
+     */
+    [MaxLength(500)]
+    public string? MotivazioneEsito { get; set; }
+
+    /*
+     * Data e ora in cui la richiesta
+     * è stata approvata oppure respinta.
+     */
+    public DateTime? DataValutazione { get; set; }
+
+    /*
+     * Nominativo del Super che ha effettuato
+     * la valutazione della richiesta.
+     */
+    [MaxLength(150)]
+    public string? ValutataDa { get; set; }
+
     public StatoRichiesta Stato { get; set; } = StatoRichiesta.InAttesa;
 
     public DateTime DataCreazione { get; set; } = DateTime.Now;

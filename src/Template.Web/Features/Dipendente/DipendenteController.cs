@@ -79,7 +79,31 @@ namespace Template.Web.Features.Dipendente
                         : (r.TipoMancataTimbratura != null ? r.TipoMancataTimbratura.ToString()! : "-"),
                     Orario = CreaOrario(r),
                     Stato = r.Stato.ToString(),
-                    StatoCssClass = CreaClasseStato(r.Stato)
+                    StatoCssClass = CreaClasseStato(r.Stato),
+
+                    /*
+                     * La motivazione viene lasciata vuota
+                     * finché la richiesta è ancora in attesa.
+                     */
+                    MotivazioneEsito =
+                        string.IsNullOrWhiteSpace(
+                            r.MotivazioneEsito)
+                            ? string.Empty
+                            : r.MotivazioneEsito,
+
+                    ValutataDa =
+                        string.IsNullOrWhiteSpace(
+                            r.ValutataDa)
+                            ? string.Empty
+                            : r.ValutataDa,
+
+                    DataValutazione =
+                        r.DataValutazione.HasValue
+                            ? r.DataValutazione.Value
+                                .ToString("dd/MM/yyyy HH:mm")
+                            : string.Empty
+
+
                 })
                 .ToList();
 
@@ -330,7 +354,16 @@ namespace Template.Web.Features.Dipendente
              */
             EliminaRichiestaInConferma();
 
-            return RedirectToAction(nameof(Index));
+            /*
+             * Dopo il salvataggio definitivo torniamo alla nuova Home comune,
+             * cioè il calendario Ferie Reparto.
+             *
+             * Non utilizziamo nameof(Index), perché quello indicherebbe
+             * l'Index del DipendenteController, cioè la vecchia Home.
+             */
+            return RedirectToAction(
+                "Index",
+                "Reparto");
         }
 
         [HttpPost]

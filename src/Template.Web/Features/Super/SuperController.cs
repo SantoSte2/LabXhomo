@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using Template.Enums;
 using Template.Models;
@@ -88,6 +89,25 @@ namespace Template.Web.Features.Super
                         Data = CreaPeriodo(r),
                         Orario = CreaOrario(r),
                         Motivazione = string.IsNullOrWhiteSpace(r.Motivazione) ? "-" : r.Motivazione,
+                        /*
+                         * Esito della valutazione del Super.
+                         */
+                        MotivazioneEsito =
+                            string.IsNullOrWhiteSpace(r.MotivazioneEsito)
+                                ? "-"
+                                : r.MotivazioneEsito,
+
+                        DataValutazione =
+                            r.DataValutazione.HasValue
+                                ? r.DataValutazione.Value
+                                    .ToString("dd/MM/yyyy HH:mm")
+                                : "-",
+
+                        ValutataDa =
+                            string.IsNullOrWhiteSpace(r.ValutataDa)
+                                ? "-"
+                                : r.ValutataDa,
+
                         Stato = r.Stato.ToString(),
                         StatoCssClass = CreaClasseStato(r.Stato),
                         PuoEssereValidata = r.Stato == StatoRichiesta.InAttesa
@@ -100,40 +120,135 @@ namespace Template.Web.Features.Super
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual IActionResult Approva(int richiestaId, int dipendenteId, string searchTerm = "")
+        public virtual IActionResult Approva(
+    int richiestaId,
+    int dipendenteId,
+    string motivazioneEsito,
+    string searchTerm = "")
         {
-            var richiesta = _dbContext.Richieste.FirstOrDefault(r => r.Id == richiestaId);
-
-            if (richiesta != null)
-            {
-                richiesta.Stato = StatoRichiesta.Approvata;
-                _dbContext.SaveChanges();
-            }
-
-            return RedirectToAction("Index", new
-            {
-                searchTerm,
-                dipendenteId
-            });
+            return ValutaRichiesta(
+                richiestaId,
+                dipendenteId,
+                motivazioneEsito,
+                StatoRichiesta.Approvata,
+                searchTerm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual IActionResult Respingi(int richiestaId, int dipendenteId, string searchTerm = "")
+        public virtual IActionResult Respingi(
+            int richiestaId,
+            int dipendenteId,
+            string motivazioneEsito,
+            string searchTerm = "")
         {
-            var richiesta = _dbContext.Richieste.FirstOrDefault(r => r.Id == richiestaId);
+            return ValutaRichiesta(
+                richiestaId,
+                dipendenteId,
+                motivazioneEsito,
+                StatoRichiesta.Respinta,
+                searchTerm);
+        }
 
-            if (richiesta != null)
+        /*
+         * Applica l'esito scelto dal Super.
+         *
+         * La stessa logica viene utilizzata sia per
+         * l'approvazione sia per il rifiuto, evitando
+         * duplicazioni tra le due action POST.
+         */
+        private IActionResult ValutaRichiesta(
+            int richiestaId,
+            int dipendenteId,
+            string motivazioneEsito,
+            StatoRichiesta nuovoStato,
+            string searchTerm)
+        {
+            /*
+             * La motivazione del Super è obbligatoria.
+             * Usiamo TempData perché dopo il controllo
+             * eseguiamo un redirect secondo il pattern PRG.
+             */
+            if (string.IsNullOrWhiteSpace(
+                    motivazioneEsito))
             {
-                richiesta.Stato = StatoRichiesta.Respinta;
-                _dbContext.SaveChanges();
+                TempData["ErroreValutazione"] =
+                    "Inserisci una motivazione prima di approvare o respingere la richiesta.";
+
+                return RedirectToAction(
+                    "Index",
+                    new
+                    {
+                        searchTerm,
+                        dipendenteId
+                    });
             }
 
-            return RedirectToAction("Index", new
+            var richiesta = _dbContext.Richieste
+                .FirstOrDefault(r =>
+                    r.Id == richiestaId &&
+                    r.DipendenteId == dipendenteId);
+
+            if (richiesta == null)
             {
-                searchTerm,
-                dipendenteId
-            });
+                TempData["ErroreValutazione"] =
+                    "La richiesta selezionata non è stata trovata.";
+
+                return RedirectToAction(
+                    "Index",
+                    new
+                    {
+                        searchTerm,
+                        dipendenteId
+                    });
+            }
+
+            /*
+             * Una richiesta già valutata non può essere
+             * approvata o respinta una seconda volta.
+             */
+            if (richiesta.Stato !=
+                StatoRichiesta.InAttesa)
+            {
+                TempData["ErroreValutazione"] =
+                    "La richiesta è già stata valutata.";
+
+                return RedirectToAction(
+                    "Index",
+                    new
+                    {
+                        searchTerm,
+                        dipendenteId
+                    });
+            }
+
+            richiesta.Stato =
+                nuovoStato;
+
+            richiesta.MotivazioneEsito =
+                motivazioneEsito.Trim();
+
+            richiesta.DataValutazione =
+                DateTime.Now;
+
+            richiesta.ValutataDa =
+                HttpContext.Session.GetString("Nominativo")
+                ?? "Super";
+
+            _dbContext.SaveChanges();
+
+            TempData["EsitoValutazione"] =
+                nuovoStato == StatoRichiesta.Approvata
+                    ? "Richiesta approvata correttamente."
+                    : "Richiesta respinta correttamente.";
+
+            return RedirectToAction(
+                "Index",
+                new
+                {
+                    searchTerm,
+                    dipendenteId
+                });
         }
 
         private static string CreaOrario(Richiesta richiesta)

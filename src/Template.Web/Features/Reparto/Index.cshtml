@@ -66,17 +66,57 @@
                     <div class="marc-colleagues-actions reparto-toolbar">
                         @if (Model.RuoloUtente == "Super")
                         {
-                            <a class="btn marc-btn-secondary"
+                            @*
+                             * Ferie Reparto è ora la Home principale.
+                             * Questo pulsante porta alla pagina operativa
+                             * dove il Super gestisce approvazioni e rifiuti.
+                             *@
+                            <a class="btn marc-btn-primary"
                                href="@Url.Action("Index", "Super")">
-                                Torna alla Dashboard
+                                Gestione richieste
                             </a>
                         }
                         else
                         {
-                            <a class="btn marc-btn-secondary"
-                               href="@Url.Action("Index", "Dipendente")">
-                                Torna alla Home
-                            </a>
+                            @*
+                             * La pagina Reparto è ora la Home principale.
+                             *
+                             * I pulsanti cambiano in base al ruolo:
+                             *
+                             * Dipendente:
+                             * - può aprire il dettaglio personale;
+                             * - può inserire una nuova richiesta.
+                             *
+                             * Super:
+                             * - può aprire la gestione delle richieste.
+                             *@
+                            <div class="reparto-role-actions">
+
+                                @if (Model.UtenteDipendente)
+                                {
+                                    <a asp-controller="Dipendente"
+                                       asp-action="Index"
+                                       class="btn marc-btn-secondary">
+                                        Dettaglio personale
+                                    </a>
+
+                                    <a asp-controller="Dipendente"
+                                       asp-action="Richiesta"
+                                       asp-route-tipo="Giustificativo"
+                                       class="btn marc-btn-primary">
+                                        Nuova richiesta
+                                    </a>
+                                }
+                                else if (Model.UtenteSuper)
+                                {
+                                    <a asp-controller="Super"
+                                       asp-action="Index"
+                                       class="btn marc-btn-primary">
+                                        Gestione richieste
+                                    </a>
+                                }
+
+                            </div>
                         }
 
                         <div class="reparto-view-toggle">
@@ -109,7 +149,95 @@
                        Persone sulle righe e giorni del mese sulle colonne.
                        ===================================================== *@
 
-                    <div class="marc-calendar-nav marc-colleagues-nav reparto-month-navigation">
+                    @*
+                     * Filtro dell'intervallo visualizzato.
+                     *
+                     * Il form usa il metodo GET perché il filtro
+                     * non modifica dati nel sistema:
+                     * cambia soltanto il periodo mostrato.
+                     *@
+                    <form method="get"
+                          action="@Url.Action("Index", "Reparto")"
+                          class="reparto-period-form">
+
+                        @*
+                         * Manteniamo esplicitamente la vista mensile.
+                         * Senza questo campo il controller userebbe comunque
+                         * il valore predefinito, ma così il comportamento
+                         * rimane chiaro e prevedibile.
+                         *@
+                        <input type="hidden"
+                               name="vista"
+                               value="Mensile" />
+
+                        <div class="reparto-period-field">
+                            <label for="reparto-data-dal">
+                                Dal
+                            </label>
+
+                            <input id="reparto-data-dal"
+                                   class="form-control"
+                                   type="date"
+                                   name="dal"
+                                   value="@Model.DataDal.ToString("yyyy-MM-dd")"
+                                   required />
+                        </div>
+
+                        <div class="reparto-period-field">
+                            <label for="reparto-data-al">
+                                Al
+                            </label>
+
+                            <input id="reparto-data-al"
+                                   class="form-control"
+                                   type="date"
+                                   name="al"
+                                   value="@Model.DataAl.ToString("yyyy-MM-dd")"
+                                   required />
+                        </div>
+
+                        <div class="reparto-period-actions">
+                            <button type="submit"
+                                    class="btn marc-btn-primary">
+                                Applica periodo
+                            </button>
+
+                            @*
+                             * Ripristina il mese completo attualmente consultato.
+                             *
+                             * Non passiamo Dal e Al: il controller userà quindi
+                             * automaticamente primo e ultimo giorno del mese.
+                             *@
+                             <a class="btn marc-btn-secondary"
+                               href="@Url.Action(
+                                              "Index",
+                                              "Reparto",
+                                              new
+                                              {
+                                                  vista = "Mensile",
+                                                  mese = Model.Mese,
+                                                  anno = Model.Anno
+                                              })">
+                            Intero mese
+                        </a>
+                    </div>
+
+                    </form>
+
+                @if (!string.IsNullOrWhiteSpace(Model.MessaggioPeriodo))
+                    {
+                        @*
+                         * Il controller può correggere automaticamente:
+                         * - una data finale precedente a quella iniziale;
+                         * - un intervallo superiore a 31 giorni.
+                         *@
+                        <div class="reparto-period-message"
+                             role="alert">
+                            @Model.MessaggioPeriodo
+                        </div>
+                    }
+                    
+                       <div class="marc-calendar-nav marc-colleagues-nav reparto-month-navigation">
                         <a class="marc-calendar-arrow"
                            href="@(Url.Action("Index", "Reparto", new
                            {
@@ -121,7 +249,7 @@
                     </a>
 
                         <div class="marc-calendar-current">
-                            @Model.NomeMese @Model.Anno
+                            @Model.TitoloPeriodo
                         </div>
 
                         <a class="marc-calendar-arrow"
@@ -197,6 +325,41 @@
                                                     @giorno.NomeFestivita
                                                 </small>
                                             }
+
+                                            @if (Model.UtenteSuper)
+                                            {
+                                                @*
+                                                 * Nei giorni lavorativi il Super vede:
+                                                 * - numero dei presenti;
+                                                 * - totale dei dipendenti;
+                                                 * - eventuali persone in Smart Working.
+                                                 *
+                                                 * Nei weekend e nelle festività mostriamo
+                                                 * semplicemente "Non lavorativo".
+                                                 *@
+                                                @if (giorno.Weekend ||
+                                                                                    giorno.FestivoNazionale)
+                                                {
+                                                    <small class="reparto-presence-non-working">
+                                                        Non lavorativo
+                                                    </small>
+                                                }
+                                                else
+                                                {
+                                                    <small class="reparto-presence-summary">
+                                                        Presenti
+                                                        @giorno.DipendentiPresenti/@giorno.TotaleDipendenti
+                                                    </small>
+
+                                                    @if (giorno.DipendentiSmartWorking > 0)
+                                                    {
+                                                        <small class="reparto-smart-summary">
+                                                            Smart @giorno.DipendentiSmartWorking
+                                                        </small>
+                                                    }
+                                                }
+                                            }
+
                                         </th>
                                     }
                                 </tr>
@@ -205,9 +368,24 @@
                             <tbody>
                                 @foreach (var persona in Model.Persone)
                                 {
-                                    <tr>
+                                    @*
+                                     * La classe viene applicata soltanto
+                                     * alla riga dell'utente autenticato.
+                                     *@
+                                    <tr class="@(persona.UtenteCorrente
+                                                            ? "reparto-current-user-row"
+                                                            : "")">
                                         <td class="marc-colleague-name-column">
-                                            <strong>@persona.Nominativo</strong>
+                                            <strong class="reparto-person-name">
+                                                @persona.Nominativo
+
+                                                @if (persona.UtenteCorrente)
+                                                        {
+                                                            <span class="reparto-current-user-badge">
+                                                                Tu
+                                                            </span>
+                                                        }
+                                                    </strong>
 
                                             <span>
                                                 @persona.Matricola - @persona.Ruolo
@@ -233,20 +411,33 @@
                                                                    : "")"
                                                  title="@tooltipCella">
 
-                                                 @if (cella.HaEventi)
+                                    @if (cella.HaEventi)
                                                 {
-                                                    /*
-                                                    * Ogni richiesta è rappresentata da un quadratino.
-                                                    * Il colore continua a dipendere dallo stato:
-                                                    * arancione, verde oppure rosso.
-                                                    */
-                                                    <div class="marc-colleague-dots"
-                                                         title="@string.Join(", ", cella.Eventi.Select(e => e.Testo))">
+                                                    @*
+                                                     * Ogni richiesta mostra ora:
+                                                     * - la tipologia;
+                                                     * - lo stato scritto;
+                                                     * - il colore come supporto aggiuntivo.
+                                                     *@
+                                                    <div class="reparto-request-list">
 
                                                         @foreach (var evento in cella.Eventi)
                                                         {
-                                                            <span class="marc-calendar-dot @evento.StatoCssClass"></span>
+                                                            <div class="reparto-request-chip
+                                            @evento.StatoCssClass"
+                                                                 title="@($"{evento.Testo} - {evento.StatoTesto}")">
+
+                                                                <span class="reparto-request-type">
+                                                                    @evento.Testo
+                                                                </span>
+
+                                                                <span class="reparto-request-status">
+                                                                    @evento.StatoTesto
+                                                                </span>
+
+                                                            </div>
                                                         }
+
                                                     </div>
                                                 }
                                             </td>
@@ -257,31 +448,7 @@
                         </table>
                     </div>
 
-                    <div class="marc-colleagues-legend">
-                        <span>
-                            <i class="marc-calendar-dot marc-status-pending"></i>
-                            In attesa
-                        </span>
-
-                        <span>
-                            <i class="marc-calendar-dot marc-status-approved"></i>
-                            Approvata
-                        </span>
-
-                        <span>
-                            <i class="marc-calendar-dot marc-status-rejected"></i>
-                            Respinta
-                        </span>
-                        <span>
-                            <i class="reparto-holiday-legend reparto-holiday-civil"></i>
-                            Festività civile
-                        </span>
-
-                        <span>
-                            <i class="reparto-holiday-legend reparto-holiday-religious"></i>
-                            Festività religiosa
-                        </span>
-                    </div>
+                    
                 }
                 else
                 {
@@ -451,15 +618,43 @@
                                                  *@
                                                 @if (cella.HaPersone)
                                                 {
-                                                    <div class="reparto-year-initials">
+                                                    @*
+                                                     * Ogni persona viene mostrata con:
+                                                     * - iniziali;
+                                                     * - stato scritto esplicitamente;
+                                                     * - colore come supporto visivo.
+                                                     *@
+                                                    <div class="reparto-year-people">
 
                                                         @foreach (var persona in cella.Persone)
                                                         {
-                                                            <span class="reparto-year-initial
-                                                                @persona.StatoCssClass"
-                                                                  title="@($"{persona.Nominativo} - {persona.Matricola} - {persona.Stato}")">
-                                                                @persona.Iniziali
-                                                            </span>
+                                                            <div class="reparto-year-person
+                                                                    @persona.StatoCssClass"
+                                                                 title="@($"{persona.Nominativo} - {persona.Matricola} - {persona.TipoRichiestaTesto} - {persona.StatoTesto}")">
+
+                                                                @*
+                                                                 * Iniziali della persona.
+                                                                 *@
+                                                                <span class="reparto-year-person-initials">
+                                                                    @persona.Iniziali
+                                                                </span>
+
+                                                                @*
+                                                                 * Tipologia della richiesta:
+                                                                 * Smart working, Ferie, Permesso...
+                                                                 *@
+                                                                <span class="reparto-year-person-type">
+                                                                    @persona.TipoRichiestaTesto
+                                                                </span>
+
+                                                                @*
+                                                                 * Stato scritto esplicitamente.
+                                                                 *@
+                                                                <span class="reparto-year-person-status">
+                                                                    @persona.StatoTesto
+                                                                </span>
+
+                                                            </div>
                                                         }
 
                                                     </div>
@@ -472,46 +667,7 @@
                             </tbody>
                         </table>
                     </div>
-                    @*
-                     * Legenda specifica della vista annuale.
-                     * Le festività riutilizzano gli stessi colori
-                     * già introdotti nella vista mensile.
-                     *@
-                    <div class="marc-colleagues-legend reparto-year-legend">
-
-                        <span>
-                            <i class="reparto-weekend-legend"></i>
-                            Sabato o domenica
-                        </span>
-
-                        <span>
-                            <i class="reparto-holiday-legend reparto-holiday-civil"></i>
-                            Festività civile
-                        </span>
-
-                        <span>
-                            <i class="reparto-holiday-legend reparto-holiday-religious"></i>
-                            Festività religiosa
-                        </span>
-
-                    </div>
-
-                    <div class="marc-colleagues-legend">
-                        <span>
-                            <i class="marc-calendar-dot marc-status-pending"></i>
-                            In attesa
-                        </span>
-
-                        <span>
-                            <i class="marc-calendar-dot marc-status-approved"></i>
-                            Approvata
-                        </span>
-
-                        <span>
-                            <i class="marc-calendar-dot marc-status-rejected"></i>
-                            Respinta
-                        </span>
-                    </div>
+                    
                 }
 
             </section>

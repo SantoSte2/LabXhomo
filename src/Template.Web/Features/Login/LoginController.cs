@@ -46,16 +46,13 @@ namespace Template.Web.Features.Login
                 return View(new LoginViewModel());
             }
 
-            if (User.IsInRole("Super"))
-            {
-                return RedirectToAction(
-                    "Index",
-                    "Super");
-            }
-
+            /*
+             * Quando la sessione viene ricostruita dal cookie,
+             * riportiamo l'utente nella Home comune.
+             */
             return RedirectToAction(
                 "Index",
-                "Dipendente");
+                "Reparto");
         }
 
         [HttpGet]
@@ -144,12 +141,16 @@ namespace Template.Web.Features.Login
                 iniziali,
                 dipendente.Ruolo.ToString());
 
-            if (dipendente.Ruolo == RuoloUtente.Super)
-            {
-                return RedirectToAction("Index", "Super");
-            }
-
-            return RedirectToAction("Index", "Dipendente");
+            /*
+             * Dopo il login tutti gli utenti entrano nella nuova
+             * schermata principale condivisa: Ferie Reparto.
+             *
+             * La pagina mostrerà poi azioni diverse
+             * in base al ruolo presente nella sessione.
+             */
+            return RedirectToAction(
+                "Index",
+                "Reparto");
         }
 
         [HttpPost]

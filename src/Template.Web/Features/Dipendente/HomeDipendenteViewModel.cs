@@ -83,6 +83,36 @@ namespace Template.Web.Features.Dipendente
         public string Stato { get; set; } = string.Empty;
 
         public string StatoCssClass { get; set; } = string.Empty;
+
+        /*
+         * Motivazione inserita dal Super durante
+         * l'approvazione oppure il rifiuto.
+         */
+        public string MotivazioneEsito { get; set; }
+            = string.Empty;
+
+        /*
+         * Nominativo del Super che ha valutato
+         * la richiesta.
+         */
+        public string ValutataDa { get; set; }
+            = string.Empty;
+
+        /*
+         * Data e ora della valutazione,
+         * già formattate dal controller.
+         */
+        public string DataValutazione { get; set; }
+            = string.Empty;
+
+        /*
+         * La View mostra il riquadro soltanto
+         * quando la richiesta è stata effettivamente valutata.
+         */
+        public bool HaValutazioneSuper =>
+            !string.IsNullOrWhiteSpace(
+                MotivazioneEsito);
+
     }
 
     public class GiornoCalendarioViewModel

@@ -259,6 +259,54 @@
                                             <div class="marc-history-detail">
                                                 Orario: @richiesta.Orario
                                             </div>
+
+                                            @if (richiesta.HaValutazioneSuper)
+                                            {
+                                                @*
+                                                 * Il riquadro viene mostrato soltanto dopo
+                                                 * l'approvazione o il rifiuto della richiesta.
+                                                 *@
+                                                <div class="marc-employee-evaluation
+                                                    @richiesta.StatoCssClass">
+
+                                                    <strong class="marc-employee-evaluation-title">
+                                                        Motivazione del Super
+                                                    </strong>
+
+                                                    <p class="marc-employee-evaluation-text">
+                                                        @richiesta.MotivazioneEsito
+                                                    </p>
+
+                                                    @if (!string.IsNullOrWhiteSpace(
+                                                        richiesta.ValutataDa) ||
+                                                        !string.IsNullOrWhiteSpace(
+                                                        richiesta.DataValutazione))
+                                                    {
+                                                        <small class="marc-employee-evaluation-meta">
+
+                                                            @if (!string.IsNullOrWhiteSpace(
+                                                                 richiesta.ValutataDa))
+                                                            {
+                                                                <span>
+                                                                    Valutata da
+                                                                    @richiesta.ValutataDa
+                                                                </span>
+                                                            }
+
+                                                            @if (!string.IsNullOrWhiteSpace(
+                                                                 richiesta.DataValutazione))
+                                                            {
+                                                                <span>
+                                                                    il @richiesta.DataValutazione
+                                                                </span>
+                                                            }
+
+                                                        </small>
+                                                    }
+
+                                                </div>
+                                            }
+
                                         </div>
 
                                         <span class="marc-status-badge @richiesta.StatoCssClass">
@@ -281,8 +329,8 @@
                             Mancate Timbrature
                         </a>
                         <a class="btn marc-btn-secondary"
-                           href="@Url.Action("Index", "Reparto", new { mese = Model.MeseSelezionato, anno = Model.AnnoSelezionato })">
-                            Calendario Colleghi
+                           href="@Url.Action("Index", "Reparto")">
+                            Torna alla Home
                         </a>
                     </div>
 
